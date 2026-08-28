@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #F8FAFC;
+  color: #101828;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Custom scrollbar and aesthetics */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.badge-finding {
+  @apply bg-amber-50 text-amber-700 border border-amber-200 font-medium px-2.5 py-0.5 rounded-full text-xs inline-flex items-center gap-1.5;
+}
+
+.badge-confirmed {
+  @apply bg-blue-50 text-blue-700 border border-blue-200 font-medium px-2.5 py-0.5 rounded-full text-xs inline-flex items-center gap-1.5;
+}
+
+.badge-progress {
+  @apply bg-indigo-50 text-indigo-700 border border-indigo-200 font-medium px-2.5 py-0.5 rounded-full text-xs inline-flex items-center gap-1.5;
+}
+
+.badge-completed {
+  @apply bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium px-2.5 py-0.5 rounded-full text-xs inline-flex items-center gap-1.5;
+}
+
+.badge-cancelled {
+  @apply bg-rose-50 text-rose-700 border border-rose-200 font-medium px-2.5 py-0.5 rounded-full text-xs inline-flex items-center gap-1.5;
+}
