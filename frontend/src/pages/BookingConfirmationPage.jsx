@@ -93,6 +93,15 @@ export const BookingConfirmationPage = () => {
         <div className="p-6 space-y-4">
           <div className="grid grid-cols-2 gap-4 pb-4 border-b border-slate-100 text-sm">
             <div>
+              <span className="text-xs font-semibold text-slate-400 uppercase">Booking Type</span>
+              <p className="font-bold flex items-center gap-1.5 mt-0.5">
+                <span className={`px-2.5 py-0.5 rounded-full text-xs font-extrabold ${booking.bookingType === 'TATKAL' ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-blue-100 text-blue-800'}`}>
+                  {booking.bookingType === 'TATKAL' ? '⚡ Tatkal' : 'Normal'}
+                </span>
+              </p>
+            </div>
+
+            <div>
               <span className="text-xs font-semibold text-slate-400 uppercase">Service</span>
               <p className="font-bold text-slate-900 flex items-center gap-1.5 mt-0.5">
                 <HardHat className="w-4 h-4 text-[#155EEF]" />
@@ -120,8 +129,37 @@ export const BookingConfirmationPage = () => {
               <span className="text-xs font-semibold text-slate-400 uppercase">Duration</span>
               <p className="font-bold text-slate-900 flex items-center gap-1.5 mt-0.5">
                 <Clock className="w-4 h-4 text-[#155EEF]" />
-                {booking.duration}
+                {booking.duration || '1 Day'}
               </p>
+            </div>
+          </div>
+
+          {/* Pricing Breakdown Box */}
+          <div className="bg-slate-900 text-white p-4 rounded-2xl space-y-2 text-xs">
+            <div className="flex items-center justify-between">
+              <span className="text-slate-400">Labour Charges</span>
+              <span className="font-bold text-white">₹{booking.labourAmount || (booking.estimatedCost ? Math.max(0, booking.estimatedCost - 50 - (booking.bookingType === 'TATKAL' ? 200 : 0)) : 0)}</span>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <span className="text-slate-400">Transportation</span>
+              <span className="font-bold text-emerald-400">₹{booking.transportationCharge || 50}</span>
+            </div>
+
+            {booking.bookingType === 'TATKAL' && (
+              <div className="flex items-center justify-between">
+                <span className="text-amber-400">Tatkal Charge</span>
+                <span className="font-bold text-amber-400">₹{booking.tatkalCharge || 200}</span>
+              </div>
+            )}
+
+            <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-sm font-extrabold">
+              <span className="text-amber-400">Total Amount</span>
+              <span className="text-xl text-amber-400">₹{booking.totalAmount || booking.estimatedTotal || booking.estimatedCost || 0}</span>
+            </div>
+
+            <div className="text-[10px] text-emerald-400 text-right font-medium">
+              ₹50 transportation charge included
             </div>
           </div>
 

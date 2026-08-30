@@ -33,14 +33,14 @@ export const MajdoorServicesPage = () => {
   const DISPLAY_PHONE = '+91 63958 82126';
 
   const majdoorServices = [
-    { name: 'Construction Labour', icon: Building2, rate: 650, desc: 'Concrete mixing, lintel casting, brick carrying, site helper work.', popular: true },
-    { name: 'Loading / Unloading Labour', icon: Truck, rate: 600, desc: 'Heavy lifting for trucks, containers, godowns & freight.', popular: true },
-    { name: 'House Shifting Labour', icon: PackageCheck, rate: 600, desc: 'Dedicated helpers for household packing, loading & moving.', popular: true },
-    { name: 'Agriculture / Farm Labour', icon: Wheat, rate: 550, desc: 'Crop harvesting, field preparation, sowing, & farm work.' },
-    { name: 'Cleaning Labour', icon: UserCheck, rate: 550, desc: 'Site debris cleanup, post-construction washing, deep cleaning.' },
-    { name: 'Building Material Labour', icon: Building, rate: 650, desc: 'Cement bags, sand, gravel, stone dust loading & unloading.' },
-    { name: 'Road Work Labour', icon: Construction, rate: 650, desc: 'Tar paving, gutter excavation, pipe laying civil helpers.' },
-    { name: 'Digging / Excavation Labour', icon: Shovel, rate: 600, desc: 'Manual trench digging, foundation excavation & pit digging.' },
+    { name: 'Construction Labour', icon: Building2, rate: 700, desc: 'Concrete mixing, lintel casting, brick carrying, site helper work.', popular: true },
+    { name: 'Loading / Unloading', icon: Truck, rate: 5, desc: 'Heavy lifting for trucks, containers, godowns & freight.', popular: true },
+    { name: 'House Shifting Labour', icon: PackageCheck, rate: 700, desc: 'Dedicated helpers for household packing, loading & moving.', popular: true },
+    { name: 'Agriculture / Farm Labour', icon: Wheat, rate: 650, desc: 'Crop harvesting, field preparation, sowing, & farm work.' },
+    { name: 'Cleaning Labour', icon: UserCheck, rate: 600, desc: 'Site debris cleanup, post-construction washing, deep cleaning.' },
+    { name: 'Building Material Labour', icon: Building, rate: 700, desc: 'Cement bags, sand, gravel, stone dust loading & unloading.' },
+    { name: 'Road Work Labour', icon: Construction, rate: 700, desc: 'Tar paving, gutter excavation, pipe laying civil helpers.' },
+    { name: 'Digging / Excavation Labour', icon: Shovel, rate: 700, desc: 'Manual trench digging, foundation excavation & pit digging.' },
     { name: 'Gardening Labour', icon: Wheat, rate: 550, desc: 'Lawn digging, soil levelling, weeding & tree trimming.' },
     { name: 'Factory / Industrial Labour', icon: Factory, rate: 600, desc: 'Assembly line assistance, packing, shifting & factory helpers.' },
     { name: 'Warehouse Labour', icon: Boxes, rate: 600, desc: 'Goods stacking, inventory sorting, packing & dispatch staff.' },
@@ -56,11 +56,13 @@ export const MajdoorServicesPage = () => {
 
   const openWhatsAppDirect = (serviceName = '') => {
     const msg = buildWhatsAppMessage(serviceName);
-    window.open(`https://wa.me/${PHONE_NUMBER.replace('+', '')}?text=${msg}`, '_blank');
+    const cleanPhone = PHONE_NUMBER.replace(/\D/g, '');
+    window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank', 'noopener,noreferrer');
   };
 
   const handleCallDirect = () => {
-    window.location.href = `tel:${PHONE_NUMBER}`;
+    const cleanPhone = PHONE_NUMBER.replace(/\D/g, '');
+    window.location.href = `tel:+${cleanPhone}`;
   };
 
   return (
@@ -159,7 +161,7 @@ export const MajdoorServicesPage = () => {
               <div className="mt-5 pt-4 border-t border-slate-100 space-y-2">
                 <div className="flex items-center justify-between text-xs mb-1">
                   <span className="text-slate-400 font-medium">Est. Rate</span>
-                  <span className="font-extrabold text-slate-900">₹{service.rate}/day</span>
+                  <span className="font-extrabold text-slate-900">₹{service.rate}{service.name.includes('Loading') ? '/bag' : '/day'}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <button

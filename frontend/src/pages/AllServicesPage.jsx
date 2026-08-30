@@ -36,7 +36,7 @@ export const AllServicesPage = () => {
     // Majdoor / Labour — ACTIVE NOW
     { name: 'General Labour', category: 'majdoor', icon: HardHat, status: 'active', rate: 550, desc: 'Site cleanup, manual helper tasks, daily wage labour.' },
     { name: 'Construction Labour', category: 'majdoor', icon: Building2, status: 'active', rate: 650, desc: 'Concrete mixing, brick carrying, scaffolding assistance.', popular: true },
-    { name: 'Loading / Unloading', category: 'majdoor', icon: HardHat, status: 'active', rate: 600, desc: 'Heavy goods lifting for trucks, containers & warehouses.', popular: true },
+    { name: 'Loading / Unloading', category: 'majdoor', icon: HardHat, status: 'active', rate: 5, desc: 'Heavy goods lifting for trucks, containers & warehouses.', popular: true },
     { name: 'House Shifting Labour', category: 'majdoor', icon: HardHat, status: 'active', rate: 600, desc: 'Household furniture moving, packing & lifting helpers.' },
     { name: 'Farm Labour', category: 'majdoor', icon: HardHat, status: 'active', rate: 550, desc: 'Crop harvesting, soil prep, farming helper work.' },
     { name: 'Digging / Excavation', category: 'majdoor', icon: HardHat, status: 'active', rate: 600, desc: 'Trench digging, foundation excavation & pit digging.' },
@@ -68,7 +68,8 @@ export const AllServicesPage = () => {
 
   const openWhatsAppDirect = (serviceName = '') => {
     const msg = buildWhatsAppMessage(serviceName);
-    window.open(`https://wa.me/${PHONE_NUMBER.replace('+', '')}?text=${msg}`, '_blank');
+    const cleanPhone = PHONE_NUMBER.replace(/\D/g, '');
+    window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank', 'noopener,noreferrer');
   };
 
   const handleBookService = (service) => {
@@ -205,8 +206,8 @@ export const AllServicesPage = () => {
                 {isActive ? (
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-xs mb-1">
-                      <span className="text-slate-400 font-medium">Daily Wage</span>
-                      <span className="font-extrabold text-slate-900">₹{service.rate}/worker</span>
+                      <span className="text-slate-400 font-medium">{service.name.includes('Loading') ? 'Per Bag Rate' : 'Daily Wage'}</span>
+                      <span className="font-extrabold text-slate-900">₹{service.rate}{service.name.includes('Loading') ? '/bag' : '/worker'}</span>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <button

@@ -176,9 +176,10 @@ export const AdminBookingsPage = () => {
                 <th className="py-4 px-6">Booking ID</th>
                 <th className="py-4 px-6">Customer Info</th>
                 <th className="py-4 px-6">Service</th>
+                <th className="py-4 px-6">Type</th>
                 <th className="py-4 px-6">Workers</th>
-                <th className="py-4 px-6">Date & Duration</th>
-                <th className="py-4 px-6">Location</th>
+                <th className="py-4 px-6">Date & Time</th>
+                <th className="py-4 px-6">Total Amount</th>
                 <th className="py-4 px-6">Status</th>
                 <th className="py-4 px-6 text-right">Actions</th>
               </tr>
@@ -192,12 +193,17 @@ export const AdminBookingsPage = () => {
                     <span className="text-[10px] text-slate-400">{b.customerPhone}</span>
                   </td>
                   <td className="py-4 px-6 font-bold text-blue-400">{b.serviceName}</td>
+                  <td className="py-4 px-6 font-bold">
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${b.bookingType === 'TATKAL' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-blue-500/20 text-blue-300'}`}>
+                      {b.bookingType === 'TATKAL' ? '⚡ TATKAL' : 'NORMAL'}
+                    </span>
+                  </td>
                   <td className="py-4 px-6 font-bold text-white">{b.workerCount} Workers</td>
                   <td className="py-4 px-6">
                     <span>{b.date}</span>
-                    <span className="block text-[10px] text-slate-400">{b.duration}</span>
+                    <span className="block text-[10px] text-slate-400">{b.startTime || '09:00 AM'}</span>
                   </td>
-                  <td className="py-4 px-6">{b.area}, {b.city}</td>
+                  <td className="py-4 px-6 font-extrabold text-amber-400">₹{b.totalAmount || b.estimatedTotal || b.estimatedCost || 0}</td>
                   <td className="py-4 px-6">
                     <StatusBadge status={b.status} />
                   </td>
@@ -238,6 +244,9 @@ export const AdminBookingsPage = () => {
 
             <div className="flex items-center gap-3 border-b border-slate-800 pb-4">
               <span className="font-extrabold text-xl text-amber-400">{selectedBookingModal.bookingId}</span>
+              <span className={`px-2.5 py-0.5 rounded-full text-xs font-extrabold ${selectedBookingModal.bookingType === 'TATKAL' ? 'bg-amber-500 text-slate-950' : 'bg-blue-600 text-white'}`}>
+                {selectedBookingModal.bookingType === 'TATKAL' ? '⚡ TATKAL' : 'NORMAL'}
+              </span>
               <StatusBadge status={selectedBookingModal.status} />
             </div>
 
@@ -254,9 +263,31 @@ export const AdminBookingsPage = () => {
               <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
                 <h4 className="font-bold text-amber-400 uppercase text-[10px]">Booking Requirements</h4>
                 <p><strong>Service:</strong> {selectedBookingModal.serviceName}</p>
+                <p><strong>Booking Type:</strong> {selectedBookingModal.bookingType || 'NORMAL'}</p>
                 <p><strong>Workers Required:</strong> {selectedBookingModal.workerCount}</p>
-                <p><strong>Date & Time:</strong> {selectedBookingModal.date} ({selectedBookingModal.startTime} - {selectedBookingModal.endTime})</p>
+                <p><strong>Date & Time:</strong> {selectedBookingModal.date} ({selectedBookingModal.startTime || '09:00 AM'} - {selectedBookingModal.endTime || '06:00 PM'})</p>
                 <p><strong>Address:</strong> {selectedBookingModal.address}</p>
+              </div>
+            </div>
+
+            {/* Admin Pricing Breakdown Box */}
+            <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 text-xs">
+              <h4 className="font-bold text-amber-400 uppercase text-[10px]">Financial & Price Breakdown</h4>
+              <div className="grid grid-cols-2 gap-2 text-slate-300">
+                <p><strong>Labour Charges:</strong> ₹{selectedBookingModal.labourAmount || (selectedBookingModal.estimatedCost ? Math.max(0, selectedBookingModal.estimatedCost - 50 - (selectedBookingModal.bookingType === 'TATKAL' ? 200 : 0)) : 0)}</p>
+                <p><strong>Transportation Charge:</strong> ₹{selectedBookingModal.transportationCharge || 50}</p>
+                {selectedBookingModal.bookingType === 'TATKAL' && (
+                  <p className="text-amber-400"><strong>Tatkal Charge:</strong> ₹{selectedBookingModal.tatkalCharge || 200}</p>
+                )}
+                {selectedBookingModal.serviceRate && (
+                  <p><strong>Selected Service Rate:</strong> ₹{selectedBookingModal.serviceRate} / bag</p>
+                )}
+                {selectedBookingModal.carryingDistance && (
+                  <p><strong>Carrying Distance:</strong> {selectedBookingModal.carryingDistance}</p>
+                )}
+                <p className="text-base text-amber-400 font-extrabold col-span-2 pt-2 border-t border-slate-800">
+                  Total Amount: ₹{selectedBookingModal.totalAmount || selectedBookingModal.estimatedTotal || selectedBookingModal.estimatedCost || 0}
+                </p>
               </div>
             </div>
 

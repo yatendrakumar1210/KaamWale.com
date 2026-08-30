@@ -207,7 +207,12 @@ export const CustomerDashboardPage = () => {
               <div key={b.id || b.bookingId} className="bg-white rounded-3xl border border-blue-200 p-6 shadow-md hover:shadow-xl transition-all space-y-4 relative overflow-hidden">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                   <div>
-                    <span className="text-[11px] text-slate-400 font-bold block">ID: {b.bookingId}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] text-slate-400 font-bold block">ID: {b.bookingId}</span>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${b.bookingType === 'TATKAL' ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-blue-100 text-blue-800'}`}>
+                        {b.bookingType === 'TATKAL' ? '⚡ Tatkal' : 'Normal'}
+                      </span>
+                    </div>
                     <h3 className="font-extrabold text-slate-900 text-lg">{b.serviceName}</h3>
                   </div>
                   <StatusBadge status={b.status} />
@@ -227,8 +232,8 @@ export const CustomerDashboardPage = () => {
                     <strong className="text-slate-800 font-bold">{b.area}, {b.city}</strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block">Duration</span>
-                    <strong className="text-slate-800 font-bold">{b.duration}</strong>
+                    <span className="text-slate-400 block">Total Amount</span>
+                    <strong className="text-amber-600 font-bold">₹{b.totalAmount || b.estimatedTotal || b.estimatedCost || 0}</strong>
                   </div>
                 </div>
 

@@ -102,17 +102,52 @@ class DataStore {
   createBooking(bookingData) {
     const bookingCount = this.bookings.length + 10246;
     const bookingId = `LCB-${bookingCount}`;
+    const bookingType = (bookingData.bookingType || 'NORMAL').toUpperCase();
+    const transportationCharge = bookingData.transportationCharge !== undefined ? bookingData.transportationCharge : 50;
+    const tatkalCharge = bookingData.tatkalCharge !== undefined ? bookingData.tatkalCharge : (bookingType === 'TATKAL' ? 200 : 0);
+    const labourAmount = bookingData.labourAmount !== undefined ? bookingData.labourAmount : (bookingData.estimatedCost || 0);
+    const totalAmount = bookingData.totalAmount !== undefined ? bookingData.totalAmount : (labourAmount + transportationCharge + tatkalCharge);
+
     const newBooking = {
       id: `bk-${Date.now()}`,
       bookingId,
       status: 'finding_labour',
       assignedWorkers: [],
       createdAt: new Date().toISOString(),
-      ...bookingData
+      serviceType: bookingData.serviceType || 'daily',
+      numberOfBags: bookingData.numberOfBags || 0,
+      carryingDistance: bookingData.carryingDistance || '20m',
+      weightPerBag: bookingData.weightPerBag || '40–50 kg',
+      durationHours: bookingData.durationHours || 8,
+      pricePerBag: bookingData.pricePerBag || 5,
+      hourlyRate: bookingData.hourlyRate || 0,
+      bookingType,
+      transportationCharge,
+      tatkalCharge,
+      labourAmount,
+      serviceRate: bookingData.serviceRate,
+      rateType: bookingData.rateType || '',
+      totalAmount,
+      estimatedCost: totalAmount,
+      estimatedTotal: totalAmount,
+      workLocation: bookingData.workLocation || {
+        address: bookingData.address || 'Bulandshahr',
+        latitude: 28.4089,
+        longitude: 77.8498
+      },
+      ...bookingData,
+      bookingType,
+      transportationCharge,
+      tatkalCharge,
+      labourAmount,
+      totalAmount,
+      estimatedCost: totalAmount,
+      estimatedTotal: totalAmount
     };
     this.bookings.unshift(newBooking);
     return this.sanitizeBooking(newBooking, true);
   }
+
 
   updateBookingStatus(id, status, notes = "") {
     const idx = this.bookings.findIndex(b => b.id === id || b.bookingId === id);

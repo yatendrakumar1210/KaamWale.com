@@ -13,11 +13,13 @@ export const MobileNav = () => {
     const text = encodeURIComponent(
       `🏗️ नमस्ते KaamWale!\n\nमुझे बुलंदशहर में मजदूर चाहिए।\nकृपया उपलब्ध मजदूरों की जानकारी दें।\nधन्यवाद! 🙏`
     );
-    window.open(`https://wa.me/${PHONE_NUMBER.replace('+', '')}?text=${text}`, '_blank');
+    const cleanPhone = PHONE_NUMBER.replace(/\D/g, '');
+    window.open(`https://wa.me/${cleanPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
   };
 
   const handleCall = () => {
-    window.location.href = `tel:${PHONE_NUMBER}`;
+    const cleanPhone = PHONE_NUMBER.replace(/\D/g, '');
+    window.location.href = `tel:+${cleanPhone}`;
   };
 
   return (

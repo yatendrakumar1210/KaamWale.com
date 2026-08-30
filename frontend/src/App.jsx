@@ -11,6 +11,10 @@ import { CityPickerModal } from './components/common/CityPickerModal';
 import { HomePage } from './pages/HomePage';
 import { MajdoorServicesPage } from './pages/MajdoorServicesPage';
 import { AllServicesPage } from './pages/AllServicesPage';
+import { BookingWizardPage } from './pages/BookingWizardPage';
+import { BookingConfirmationPage } from './pages/BookingConfirmationPage';
+import { CustomerDashboardPage } from './pages/CustomerDashboardPage';
+import { BookingTrackingPage } from './pages/BookingTrackingPage';
 
 // Admin Components & Pages
 import { AdminLayout } from './components/layout/AdminLayout';
@@ -45,7 +49,11 @@ export const App = () => {
               <Route path="/" element={<HomePage />} />
               <Route path="/majdoor" element={<MajdoorServicesPage />} />
               <Route path="/services" element={<AllServicesPage />} />
-              <Route path="/book" element={<HomePage />} />
+              <Route path="/book" element={<BookingWizardPage />} />
+              <Route path="/booking-wizard" element={<BookingWizardPage />} />
+              <Route path="/booking-success/:id" element={<BookingConfirmationPage />} />
+              <Route path="/my-bookings" element={<CustomerDashboardPage />} />
+              <Route path="/track/:id" element={<BookingTrackingPage />} />
 
               {/* Admin Portal Routes */}
               <Route path="/admin" element={<AdminLayout />}>

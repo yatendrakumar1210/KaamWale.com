@@ -9,7 +9,8 @@ export const Footer = () => {
 
   const openWhatsApp = () => {
     const msg = buildWhatsAppMessage();
-    window.open(`https://wa.me/${PHONE_NUMBER.replace('+', '')}?text=${msg}`, '_blank');
+    const cleanPhone = PHONE_NUMBER.replace(/\D/g, '');
+    window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank', 'noopener,noreferrer');
   };
 
   return (
