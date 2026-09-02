@@ -274,10 +274,10 @@ export const AdminBookingsPage = () => {
             <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 text-xs">
               <h4 className="font-bold text-amber-400 uppercase text-[10px]">Financial & Price Breakdown</h4>
               <div className="grid grid-cols-2 gap-2 text-slate-300">
-                <p><strong>Labour Charges:</strong> ₹{selectedBookingModal.labourAmount || (selectedBookingModal.estimatedCost ? Math.max(0, selectedBookingModal.estimatedCost - 50 - (selectedBookingModal.bookingType === 'TATKAL' ? 200 : 0)) : 0)}</p>
+                <p><strong>Labour Charges:</strong> ₹{selectedBookingModal.labourAmount || (selectedBookingModal.estimatedCost ? Math.max(0, selectedBookingModal.estimatedCost - 50 - (selectedBookingModal.bookingType === 'TATKAL' ? 150 : 0)) : 0)}</p>
                 <p><strong>Transportation Charge:</strong> ₹{selectedBookingModal.transportationCharge || 50}</p>
                 {selectedBookingModal.bookingType === 'TATKAL' && (
-                  <p className="text-amber-400"><strong>Tatkal Charge:</strong> ₹{selectedBookingModal.tatkalCharge || 200}</p>
+                  <p className="text-amber-400"><strong>Tatkal Charge:</strong> ₹{selectedBookingModal.tatkalCharge || 150}</p>
                 )}
                 {selectedBookingModal.serviceRate && (
                   <p><strong>Selected Service Rate:</strong> ₹{selectedBookingModal.serviceRate} / bag</p>

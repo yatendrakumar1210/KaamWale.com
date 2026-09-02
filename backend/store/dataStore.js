@@ -104,7 +104,7 @@ class DataStore {
     const bookingId = `LCB-${bookingCount}`;
     const bookingType = (bookingData.bookingType || 'NORMAL').toUpperCase();
     const transportationCharge = bookingData.transportationCharge !== undefined ? bookingData.transportationCharge : 50;
-    const tatkalCharge = bookingData.tatkalCharge !== undefined ? bookingData.tatkalCharge : (bookingType === 'TATKAL' ? 200 : 0);
+    const tatkalCharge = bookingData.tatkalCharge !== undefined ? bookingData.tatkalCharge : (bookingType === 'TATKAL' ? 150 : 0);
     const labourAmount = bookingData.labourAmount !== undefined ? bookingData.labourAmount : (bookingData.estimatedCost || 0);
     const totalAmount = bookingData.totalAmount !== undefined ? bookingData.totalAmount : (labourAmount + transportationCharge + tatkalCharge);
 

@@ -4,12 +4,12 @@ import { LocationPicker } from './LocationPicker';
 import { buildWhatsAppMessage, KAAMWALE_PHONE } from '../../services/whatsappHelper';
 import API from '../../services/api';
 
-export const BookingModal = ({ isOpen, onClose, initialService }) => {
-  const [bookingType, setBookingType] = useState('NORMAL'); // 'NORMAL' | 'TATKAL'
+export const BookingModal = ({ isOpen, onClose, initialService, initialBookingType = 'NORMAL' }) => {
+  const [bookingType, setBookingType] = useState(initialBookingType); // 'NORMAL' | 'TATKAL'
   const [serviceType, setServiceType] = useState('daily'); // 'loading_unloading' | 'hourly' | 'daily'
   
-  // Loading / Unloading Rate Options (₹4 Basic, ₹6 Standard, ₹8 Heavy)
-  const [loadingRate, setLoadingRate] = useState(initialService?.rate || 6);
+  // Loading / Unloading Base Rate is ALWAYS ₹4 / bag
+  const loadingRate = 4;
   const [numberOfBags, setNumberOfBags] = useState(50);
   const [carryingDistance, setCarryingDistance] = useState('20m');
   const [durationHours, setDurationHours] = useState(4);
@@ -28,15 +28,23 @@ export const BookingModal = ({ isOpen, onClose, initialService }) => {
   const PHONE_NUMBER = KAAMWALE_PHONE;
   const DISPLAY_PHONE = '+91 63958 82126';
 
+  // Sync initialBookingType when modal opens or prop changes
+  useEffect(() => {
+    if (isOpen) {
+      setBookingType(initialBookingType || 'NORMAL');
+    }
+  }, [isOpen, initialBookingType]);
+
   // Initialize service type based on initialService
   useEffect(() => {
     if (initialService) {
-      if (initialService.rate) setLoadingRate(initialService.rate);
       const name = initialService.name || '';
       if (name.includes('Loading') || name.includes('Unloading')) {
         setServiceType('loading_unloading');
       } else if (name.includes('Hourly')) {
         setServiceType('hourly');
+      } else {
+        setServiceType('daily');
       }
     }
   }, [initialService]);
@@ -65,15 +73,16 @@ export const BookingModal = ({ isOpen, onClose, initialService }) => {
   const serviceName = initialService?.name ||
     (serviceType === 'loading_unloading' ? 'Loading / Unloading' : serviceType === 'hourly' ? 'Hourly Labour' : 'General Construction Labour');
 
-  // Hourly rates specification
+  // Hourly rates specification (1h: ₹300, 2h: ₹400, 3h: ₹500, 6h: ₹600)
   const hourlyRates = {
+    1: 300,
     2: 400,
-    4: 600,
-    6: 700
+    3: 500,
+    6: 600
   };
 
-  // Price calculations
-  const distanceExtra = carryingDistance === '60m' ? 2 : carryingDistance === '40m' ? 1 : 0;
+  // Price calculations (+2 for 40m, +4 for 60m)
+  const distanceExtra = carryingDistance === '60m' ? 4 : carryingDistance === '40m' ? 2 : 0;
   const effectiveRate = loadingRate + distanceExtra;
 
   let labourAmount = 0;
@@ -85,17 +94,17 @@ export const BookingModal = ({ isOpen, onClose, initialService }) => {
     const rateLabel = loadingRate === 4 ? 'Basic (₹4)' : loadingRate === 6 ? 'Standard (₹6)' : 'Heavy (₹8)';
     unitRateText = `₹${effectiveRate}/बैग (दर: ₹${loadingRate} + दूरी: ₹${distanceExtra})`;
   } else if (serviceType === 'hourly') {
-    const rate = hourlyRates[durationHours] || 600;
+    const rate = hourlyRates[durationHours] || 400;
     labourAmount = rate * Math.max(1, workerCount);
     unitRateText = `₹${rate} (${durationHours} घंटे)`;
   } else {
-    const dailyRate = initialService?.rate || (serviceName.includes('Mistri') ? 950 : 650);
+    const dailyRate = initialService?.rate || (serviceName.includes('Mistri') ? 950 : 700);
     labourAmount = dailyRate * Math.max(1, workerCount);
     unitRateText = `₹${dailyRate}/दिन`;
   }
 
   const transportationCharge = 50; // Mandatory ₹50 transportation charge
-  const tatkalCharge = bookingType === 'TATKAL' ? 200 : 0;
+  const tatkalCharge = bookingType === 'TATKAL' ? 150 : 0;
   const totalAmount = labourAmount + transportationCharge + tatkalCharge;
 
   // Validation function
@@ -133,6 +142,8 @@ export const BookingModal = ({ isOpen, onClose, initialService }) => {
     return true;
   };
 
+
+  
   // Submit to Backend API (MongoDB) - non-blocking
   const saveBookingToBackend = async () => {
     try {
@@ -296,7 +307,7 @@ export const BookingModal = ({ isOpen, onClose, initialService }) => {
                     <Zap className="w-4 h-4 text-amber-500 fill-current" /> Tatkal Booking
                   </span>
                   <span className="text-[10px] font-bold text-amber-900 bg-amber-200 px-2 py-0.5 rounded-full">
-                    +₹200
+                    +₹150
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-500 mt-1 font-medium">Book today with min 6-hour notice</p>
@@ -347,7 +358,7 @@ export const BookingModal = ({ isOpen, onClose, initialService }) => {
                 <Clock className="w-4 h-4 text-slate-900" />
                 <span>घंटे के अनुसार</span>
                 <span className={`text-[9px] ${serviceType === 'hourly' ? 'text-slate-900' : 'text-gray-500'}`}>
-                  2h ₹400 | 4h ₹600
+                  1h ₹300 | 2h ₹400 | 3h ₹500 | 6h ₹600
                 </span>
               </button>
 
@@ -363,7 +374,7 @@ export const BookingModal = ({ isOpen, onClose, initialService }) => {
                 <HardHat className="w-4 h-4 text-amber-400" />
                 <span>पूरा दिन (Daily)</span>
                 <span className={`text-[9px] ${serviceType === 'daily' ? 'text-gray-300' : 'text-gray-500'}`}>
-                  ₹650 / दिन
+                  ₹700 / दिन
                 </span>
               </button>
             </div>
@@ -392,8 +403,8 @@ export const BookingModal = ({ isOpen, onClose, initialService }) => {
                 <div className="grid grid-cols-3 gap-2">
                   {[
                     { dist: '20m', label: '20m (Standard)', extra: '+₹0/बैग' },
-                    { dist: '40m', label: '40m (Medium)', extra: '+₹1/बैग' },
-                    { dist: '60m', label: '60m (Long)', extra: '+₹2/बैग' }
+                    { dist: '40m', label: '40m (Medium)', extra: '+₹2/बैग' },
+                    { dist: '60m', label: '60m (Long)', extra: '+₹4/बैग' }
                   ].map((opt) => (
                     <button
                       key={opt.dist}
@@ -440,11 +451,12 @@ export const BookingModal = ({ isOpen, onClose, initialService }) => {
               <label className="block text-xs font-extrabold text-slate-900 uppercase">
                 काम का समय चुनें (Select Duration):
               </label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-4 gap-2">
                 {[
+                  { h: 1, price: 300, label: '1 घंटा — ₹300' },
                   { h: 2, price: 400, label: '2 घंटे — ₹400' },
-                  { h: 4, price: 600, label: '4 घंटे — ₹600' },
-                  { h: 6, price: 700, label: '6 घंटे — ₹700' }
+                  { h: 3, price: 500, label: '3 घंटे — ₹500' },
+                  { h: 6, price: 600, label: '6 घंटे — ₹600' }
                 ].map((item) => (
                   <button
                     key={item.h}
@@ -600,7 +612,7 @@ export const BookingModal = ({ isOpen, onClose, initialService }) => {
             {bookingType === 'TATKAL' && (
               <div className="flex items-center justify-between text-xs">
                 <span className="text-amber-400 font-medium">तत्काल शुल्क (Tatkal Charge):</span>
-                <span className="font-bold text-amber-400">₹200</span>
+                <span className="font-bold text-amber-400">₹150</span>
               </div>
             )}
 

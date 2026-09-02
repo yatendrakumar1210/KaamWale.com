@@ -138,7 +138,7 @@ export const BookingConfirmationPage = () => {
           <div className="bg-slate-900 text-white p-4 rounded-2xl space-y-2 text-xs">
             <div className="flex items-center justify-between">
               <span className="text-slate-400">Labour Charges</span>
-              <span className="font-bold text-white">₹{booking.labourAmount || (booking.estimatedCost ? Math.max(0, booking.estimatedCost - 50 - (booking.bookingType === 'TATKAL' ? 200 : 0)) : 0)}</span>
+              <span className="font-bold text-white">₹{booking.labourAmount || (booking.estimatedCost ? Math.max(0, booking.estimatedCost - 50 - (booking.bookingType === 'TATKAL' ? 150 : 0)) : 0)}</span>
             </div>
 
             <div className="flex items-center justify-between">
@@ -149,7 +149,7 @@ export const BookingConfirmationPage = () => {
             {booking.bookingType === 'TATKAL' && (
               <div className="flex items-center justify-between">
                 <span className="text-amber-400">Tatkal Charge</span>
-                <span className="font-bold text-amber-400">₹{booking.tatkalCharge || 200}</span>
+                <span className="font-bold text-amber-400">₹{booking.tatkalCharge || 150}</span>
               </div>
             )}
 

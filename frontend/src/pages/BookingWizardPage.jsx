@@ -53,7 +53,7 @@ export const BookingWizardPage = () => {
   const [formData, setFormData] = useState({
     bookingType: 'NORMAL', // 'NORMAL' | 'TATKAL'
     serviceName: initialService,
-    serviceRate: 5, // for Loading/Unloading (4, 5, 8)
+    serviceRate: 4, // for Loading/Unloading base rate ₹4/bag
     carryingDistance: '20m', // '20m' | '40m' | '60m'
     rateType: 'Standard',
     numberOfBags: 50,
@@ -152,35 +152,33 @@ export const BookingWizardPage = () => {
   const numDays = parseInt(formData.duration) || 1;
   const getCategoryRate = (name) => {
     if (name.includes('Mistri') || name.includes('Plaster') || name.includes('Brick')) return 950;
-    const rates = {
-      'Construction Labour': 700,
-      'House Shifting': 700,
-      'Demolition Labour': 700,
-      'Road Work': 700,
-      'Digging / Excavation': 700,
-      'Farm Labour': 650,
-      'Factory Labour': 600,
-      'Warehouse Labour': 600,
-      'General Labour': 550,
-      'General Helper': 550,
-      'Event / Tent Labour': 550
-    };
-    return rates[name] || 600;
+    return 700; // All standard daily wage labour rates = ₹700
   };
 
-  const baseRate = getCategoryRate(formData.serviceName);
-  const distanceExtra = formData.carryingDistance === '60m' ? 2 : formData.carryingDistance === '40m' ? 1 : 0;
-  const effectiveRate = (formData.serviceRate || 5) + distanceExtra;
+  const hourlyRates = {
+    1: 300,
+    2: 400,
+    3: 500,
+    6: 600
+  };
+
+  const isHourly = formData.serviceName.toLowerCase().includes('hourly');
+  const baseRate = formData.bookingType === 'TATKAL' ? 700 : getCategoryRate(formData.serviceName);
+  const baseBagRate = 4;
+  const effectiveRate = baseBagRate + distanceExtra;
   
   let labourAmount = 0;
   if (isLoadingUnloading) {
     labourAmount = effectiveRate * Math.max(1, parseInt(formData.numberOfBags) || 1);
+  } else if (isHourly) {
+    const rate = hourlyRates[parseInt(formData.duration)] || 400;
+    labourAmount = rate * formData.workerCount;
   } else {
     labourAmount = formData.workerCount * numDays * baseRate;
   }
 
   const transportationCharge = 50; // Mandatory ₹50 transportation charge
-  const tatkalCharge = formData.bookingType === 'TATKAL' ? 200 : 0;
+  const tatkalCharge = formData.bookingType === 'TATKAL' ? 150 : 0;
   const totalAmount = labourAmount + transportationCharge + tatkalCharge;
 
   // Step Validation
@@ -211,23 +209,7 @@ export const BookingWizardPage = () => {
       }
     }
 
-    if (currentStep === 3 && formData.bookingType === 'TATKAL') {
-      const now = new Date();
-      const currentMinutes = now.getHours() * 60 + now.getMinutes();
-      const match = formData.startTime.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
-      if (match) {
-        let hrs = parseInt(match[1], 10);
-        const mins = parseInt(match[2], 10);
-        const ampm = match[3].toUpperCase();
-        if (ampm === 'PM' && hrs < 12) hrs += 12;
-        if (ampm === 'AM' && hrs === 12) hrs = 0;
-        const startMinutes = hrs * 60 + mins;
-        if (startMinutes - currentMinutes < 360) {
-          setErrorMsg('Tatkal booking requires at least 6 hours advance notice.');
-          return false;
-        }
-      }
-    }
+    // Tatkal urgent booking is automatically dispatched (+6 hour dispatch window)
 
     return true;
   };
@@ -468,14 +450,14 @@ export const BookingWizardPage = () => {
                       <Zap className="w-5 h-5 text-amber-500 fill-current" /> ⚡ Tatkal Booking
                     </span>
                     <span className="text-xs font-bold text-amber-900 bg-amber-200 px-2.5 py-0.5 rounded-full">
-                      +₹200 Tatkal Fee
+                      +₹150 Tatkal Fee
                     </span>
                   </div>
                   <p className="text-xs text-slate-600 mt-2 font-medium">
                     Need labour urgently? Book for <strong>today</strong> — <strong>labour will be provided after the 6 hours of booking</strong>.
                   </p>
                   <div className="mt-3 text-xs font-bold text-amber-800 flex items-center gap-1">
-                    <span>• ₹50 transportation + ₹200 Tatkal charge</span>
+                    <span>• ₹50 transportation + ₹150 Tatkal charge</span>
                   </div>
                 </div>
               </div>
@@ -498,7 +480,7 @@ export const BookingWizardPage = () => {
                     Loading / Unloading Rate & Carrying Distance
                   </h4>
                   <p className="text-xs text-amber-800 font-bold mt-0.5">
-                    Effective Rate: <span className="text-base text-amber-950 font-black">₹{effectiveRate}</span> per bag (Base: ₹{formData.serviceRate} + Distance: ₹{distanceExtra})
+                    Effective Rate: <span className="text-base text-amber-950 font-black">₹{effectiveRate}</span> per bag (Base: ₹4 + Distance: ₹{distanceExtra})
                   </p>
                 </div>
 
@@ -511,8 +493,8 @@ export const BookingWizardPage = () => {
                   <div className="grid grid-cols-3 gap-3">
                     {[
                       { dist: '20m', text: '20m (Standard)', extra: '+₹0/bag' },
-                      { dist: '40m', text: '40m (Medium)', extra: '+₹1/bag' },
-                      { dist: '60m', text: '60m (Long)', extra: '+₹2/bag' }
+                      { dist: '40m', text: '40m (Medium)', extra: '+₹2/bag' },
+                      { dist: '60m', text: '60m (Long)', extra: '+₹4/bag' }
                     ].map(opt => (
                       <button
                         key={opt.dist}

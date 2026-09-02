@@ -1,4 +1,4 @@
-// Hindi WhatsApp message helper — LabourChowk.com (KaamWale.com)
+// Hindi WhatsApp message helper — LabourChowk (KaamWale)
 // Format updated location-based & service-specific booking messages
 
 export const buildWhatsAppMessage = (options = {}) => {
@@ -28,7 +28,7 @@ export const buildWhatsAppMessage = (options = {}) => {
   } = options;
 
   const isTatkal = String(bookingType).toUpperCase() === 'TATKAL';
-  const effectiveTatkal = isTatkal ? 200 : (tatkalCharge || 0);
+  const effectiveTatkal = isTatkal ? (tatkalCharge || 150) : (tatkalCharge || 0);
   const trans = transportationCharge || 50;
   const total = totalAmount || estimatedTotal || (labourAmount + trans + effectiveTatkal);
 
@@ -38,7 +38,7 @@ export const buildWhatsAppMessage = (options = {}) => {
   if (serviceType === 'loading_unloading' || serviceName.includes('Loading')) {
     const bagCount = numberOfBags || 50;
     const finalWorkers = Math.max(1, workerCount);
-    const bagRate = serviceRate || 6;
+    const bagRate = serviceRate || 4;
     const dist = carryingDistance || '20m';
 
     detailLines +=
@@ -90,7 +90,7 @@ export const buildWhatsAppMessage = (options = {}) => {
   }
 
   const message =
-    `🏗️ *LabourChowk.com — मजदूर बुकिंग अनुरोध*\n\n` +
+    `🏗️ *KaamWale — मजदूर बुकिंग अनुरोध*\n\n` +
     `${detailLines}\n\n` +
     locationBlock +
     (workNotes ? `📝 *काम का विवरण:* ${workNotes}\n\n` : '') +

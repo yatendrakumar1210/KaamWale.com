@@ -31,26 +31,28 @@ import {
   Check
 } from 'lucide-react';
 import { BookingModal } from '../components/common/BookingModal';
+import { TatkalBookingModal } from '../components/common/TatkalBookingModal';
 
 export const HomePage = () => {
   const { selectedCity, setIsCityModalOpen } = useCity();
 
   const [selectedServiceForModal, setSelectedServiceForModal] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTatkalModalOpen, setIsTatkalModalOpen] = useState(false);
 
   const PHONE_NUMBER = KAAMWALE_PHONE;
   const DISPLAY_PHONE = '+91 63958 82126';
 
-  // Active Labour / Majdoor Services
+  // Active Labour / Majdoor Services (All standard daily wage rates = ₹700)
   const labourServices = [
-    { id: 'l1', name: 'General Labour', icon: HardHat, rate: 600, desc: 'साइट सफाई, मलबा हटाने और सामान्य काम के लिए दैनिक मजदूर।', badge: 'लोकप्रिय' },
-    { id: 'l2', name: 'Construction Labour', icon: Building2, rate: 650, desc: 'कंक्रीट मिक्सिंग, ईंट ढुलाई और सिविल काम के लिए अनुभवी मजदूर।', badge: 'हाई डिमांड' },
-    { id: 'l3', name: 'Loading / Unloading', icon: Truck, rate: 5, desc: '₹5 प्रति बैग (लगभग 40–50 kg)। ट्रक, गोदाम और माल ढुलाई मजदूर।', badge: '₹5/बैग' },
-    { id: 'l4', name: 'House Shifting Labour', icon: PackageCheck, rate: 600, desc: 'घर और दुकान के सामान की लोडिंग व शिफ्टिंग में मददगार।' },
-    { id: 'l5', name: 'Farm / Agriculture Labour', icon: Wheat, rate: 550, desc: 'फसल कटाई, खेत की खुदाई और कृषि कार्य के मजदूर।' },
-    { id: 'l6', name: 'Digging & Excavation', icon: Shovel, rate: 600, desc: 'पाइपलाइन खुदाई, नींव खोदने और मिट्टी हटाने वाले मजदूर।' },
-    { id: 'l7', name: 'Demolition & Debris', icon: Hammer, rate: 700, desc: 'दीवार तोड़ने, ईंट फोड़ने व मलबा उठाने वाले ट्रेंड मजदूर।' },
-    { id: 'l8', name: 'Factory & Warehouse Labour', icon: Users, rate: 600, desc: 'इंडस्ट्रियल काम, असेंबली और माल पैकिंग के दैनिक सहायक।' }
+    { id: 'l1', name: 'General Labour', icon: HardHat, image: '/images/general_worker.png', rate: 700, desc: 'साइट सफाई, मलबा हटाने और सामान्य काम के लिए दैनिक मजदूर।', badge: 'लोकप्रिय' },
+    { id: 'l2', name: 'Construction Labour', icon: Building2, image: '/images/construction_worker.png', rate: 700, desc: 'कंक्रीट मिक्सिंग, ईंट ढुलाई और सिविल काम के लिए अनुभवी मजदूर।', badge: 'हाई डिमांड' },
+    { id: 'l3', name: 'Loading / Unloading', icon: Truck, image: '/images/loading_worker.png', rate: 4, desc: '₹4 प्रति बैग (लगभग 40–50 kg)। ट्रक, गोदाम और माल ढुलाई मजदूर।', badge: '₹4/बैग' },
+    { id: 'l4', name: 'House Shifting Labour', icon: PackageCheck, image: '/images/shifting_worker.png', rate: 700, desc: 'घर और दुकान के सामान की लोडिंग व शिफ्टिंग में मददगार।' },
+    { id: 'l5', name: 'Farm / Agriculture Labour', icon: Wheat, image: '/images/farm_worker.png', rate: 700, desc: 'फसल कटाई, खेत की खुदाई और कृषि कार्य के मजदूर।' },
+    { id: 'l6', name: 'Digging & Excavation', icon: Shovel, image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80', rate: 700, desc: 'पाइपलाइन खुदाई, नींव खोदने और मिट्टी हटाने वाले मजदूर।' },
+    { id: 'l7', name: 'Demolition & Debris', icon: Hammer, image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80', rate: 700, desc: 'दीवार तोड़ने, ईंट फोड़ने व मलबा उठाने वाले ट्रेंड मजदूर।' },
+    { id: 'l8', name: 'Factory & Warehouse Labour', icon: Users, image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=80', rate: 700, desc: 'इंडस्ट्रियल काम, असेंबली और माल पैकिंग के दैनिक सहायक।' }
   ];
 
   // Skilled Services — "COMING SOON"
@@ -65,9 +67,14 @@ export const HomePage = () => {
     { id: 'cs8', name: 'Deep Cleaning', icon: Sparkles, desc: 'हाउस डीप क्लीनिंग व वाटर टैंक सफाई।' }
   ];
 
-  const handleOpenModal = (service) => {
+  const handleOpenModal = (service = null) => {
     setSelectedServiceForModal(service);
     setIsModalOpen(true);
+  };
+
+  const handleOpenTatkalModal = (service = null) => {
+    setSelectedServiceForModal(service);
+    setIsTatkalModalOpen(true);
   };
 
   const openWhatsAppDirect = (serviceName = '') => {
@@ -101,8 +108,7 @@ export const HomePage = () => {
 
               {/* MAIN TITLE */}
               <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-tight">
-                Kaam<span className="text-[#155EEF]">Wale</span>
-                <span className="text-[#F59E0B]">.com</span> <br />
+                Kaam<span className="text-[#155EEF]">Wale</span> <br />
                 <span className="text-[#F59E0B] text-3xl sm:text-5xl font-extrabold block mt-1">
                   हर काम के लिए विश्वसनीय
                 </span>
@@ -163,8 +169,8 @@ export const HomePage = () => {
             {/* Right Visual Card */}
             <div className="lg:col-span-5 flex justify-center">
               <div className="bg-white/10 backdrop-blur-lg border border-white/20 p-6 sm:p-8 rounded-3xl text-center space-y-5 max-w-md w-full shadow-2xl relative">
-                <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-600 flex items-center justify-center text-slate-900 shadow-xl shadow-amber-500/20">
-                  <HardHat className="w-10 h-10" />
+                <div className="w-24 h-24 mx-auto rounded-3xl bg-white p-2 flex items-center justify-center text-slate-900 shadow-2xl border-2 border-amber-400 overflow-hidden transform hover:scale-105 transition-transform">
+                  <img src="/logo.png" alt="KaamWale Official Logo" className="w-full h-full object-contain" />
                 </div>
 
                 <div>
@@ -187,7 +193,7 @@ export const HomePage = () => {
                   <div className="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10">
                     <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
                     <span className="text-xs text-slate-200 font-medium">
-                      Fair Fixed Daily Wage Rates (₹550 - ₹700)
+                      Transparent Fixed Rates (₹4/bag | ₹700/day)
                     </span>
                   </div>
                   <div className="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10">
@@ -210,6 +216,51 @@ export const HomePage = () => {
                   ⚡ SELECT LABOUR & BOOK NOW
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TRANSPARENT PRICING MATRIX RIBBON */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
+        <div className="bg-white/95 backdrop-blur-xl border border-slate-200 rounded-3xl p-5 shadow-xl grid grid-cols-2 md:grid-cols-4 gap-4 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+          <div className="flex items-center gap-3 p-2">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#155EEF] flex items-center justify-center shrink-0">
+              <Truck className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Loading / Unloading</span>
+              <span className="text-base font-black text-slate-900">₹4 <span className="text-xs font-semibold text-slate-500">/ Bag</span></span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 p-2 pt-3 md:pt-2">
+            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+              <HardHat className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Daily Labour Wage</span>
+              <span className="text-base font-black text-slate-900">₹700 <span className="text-xs font-semibold text-slate-500">/ Day</span></span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 p-2 pt-3 md:pt-2">
+            <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+              <Building2 className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Skilled Raj Mistri</span>
+              <span className="text-base font-black text-slate-900">₹950 <span className="text-xs font-semibold text-slate-500">/ Day</span></span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 p-2 pt-3 md:pt-2">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <Zap className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Tatkal Urgent Dispatch</span>
+              <span className="text-base font-black text-slate-900">+₹150 <span className="text-xs font-semibold text-slate-500">Fee (6h SLA)</span></span>
             </div>
           </div>
         </div>
@@ -248,27 +299,34 @@ export const HomePage = () => {
           </div>
 
           {/* REVISED HOURLY PRICING CARDS */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
+              {
+                hours: 1,
+                label: "1 घंटा",
+                desc: "क्विक वर्क — हल्का सामान उठाना या तुरंत सहायता",
+                price: 300,
+                emoji: "⚡",
+              },
               {
                 hours: 2,
                 label: "2 घंटे",
                 desc: "छोटे काम जैसे माल उठाना, हल्की शिफ्टिंग व सफाई",
                 price: 400,
-                emoji: "⚡",
+                emoji: "🕑",
               },
               {
-                hours: 4,
-                label: "4 घंटे",
+                hours: 3,
+                label: "3 घंटे",
                 desc: "हाफ डे वर्क — अनलोडिंग, खुदाई, निर्माण सहायता",
-                price: 600,
-                emoji: "🕓",
+                price: 500,
+                emoji: "🕒",
               },
               {
                 hours: 6,
                 label: "6 घंटे",
                 desc: "विस्तृत साइट कार्य व कंस्ट्रक्शन मजदूर सहायता",
-                price: 700,
+                price: 600,
                 emoji: "🕕",
               },
             ].map((slot) => (
@@ -345,11 +403,67 @@ export const HomePage = () => {
               </p>
               <button
                 onClick={() =>
-                  handleOpenModal({ name: "Loading / Unloading", rate: 5 })
+                  handleOpenModal({ name: "Loading / Unloading", rate: 4 })
                 }
                 className="w-full py-2.5 px-4 bg-[#155EEF] hover:bg-[#1254D4] text-white text-xs font-bold rounded-xl shadow-sm"
               >
                 बैग संख्या दर्ज कर बुक करें
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* DEDICATED TATKAL BOOKING SECTION */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-r from-[#101828] via-amber-950/80 to-[#101828] border-2 border-amber-500/40 rounded-3xl p-6 sm:p-10 text-white shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 relative z-10">
+            <div className="space-y-4 max-w-2xl text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 bg-amber-500/20 text-amber-300 border border-amber-500/40 px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider">
+                <Zap className="w-4 h-4 text-amber-400 fill-amber-400" />
+                ⚡ Tatkal Booking Section (तत्काल मजदूर सेवा)
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white leading-tight">
+                Need Labour Urgently Today? <br />
+                <span className="text-amber-400">Workers Dispatched Within 6 Hours!</span>
+              </h2>
+              <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+                Emergency work at your site? Select <strong>Tatkal Booking</strong> for high-priority same-day allocation. Our operations team dispatches verified labourers to your location in Bulandshahr within 6 hours.
+              </p>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 text-xs">
+                <div className="bg-slate-900/90 border border-amber-500/30 p-3 rounded-xl">
+                  <span className="font-extrabold text-amber-400 block text-sm">⏱️ 6 Hours Notice</span>
+                  <span className="text-slate-400">Guaranteed arrival time</span>
+                </div>
+                <div className="bg-slate-900/90 border border-amber-500/30 p-3 rounded-xl">
+                  <span className="font-extrabold text-amber-400 block text-sm">⚡ Same Day Service</span>
+                  <span className="text-slate-400">Today booking</span>
+                </div>
+                <div className="bg-slate-900/90 border border-amber-500/30 p-3 rounded-xl col-span-2 sm:col-span-1">
+                  <span className="font-extrabold text-amber-400 block text-sm">💰 Clear Pricing</span>
+                  <span className="text-slate-400">Rate + ₹50 trans + ₹150</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0 w-full sm:w-auto">
+              <button
+                onClick={() => handleOpenTatkalModal()}
+                className="py-4 px-8 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black rounded-2xl shadow-xl shadow-amber-500/20 text-sm sm:text-base flex items-center justify-center gap-2 transform hover:-translate-y-0.5 transition-all"
+              >
+                <Zap className="w-5 h-5 fill-slate-950" />
+                <span>⚡ Book Tatkal Labour Now</span>
+              </button>
+
+              <button
+                onClick={() => openWhatsAppDirect('Tatkal Urgent Labour')}
+                className="py-3.5 px-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md"
+              >
+                <MessageCircle className="w-4 h-4 fill-current" />
+                <span>WhatsApp Tatkal Query</span>
               </button>
             </div>
           </div>
@@ -395,12 +509,18 @@ export const HomePage = () => {
                 className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs hover:shadow-xl hover:border-blue-400 transition-all group flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <Icon className="w-6 h-6" />
+                  <div className="relative mb-4 overflow-hidden rounded-xl h-40 bg-slate-100 border border-slate-200 shadow-inner">
+                    <img 
+                      src={service.image} 
+                      alt={service.name} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
+                    <div className="absolute top-2 left-2 w-8 h-8 rounded-lg bg-white/90 backdrop-blur-md text-amber-600 border border-white/40 flex items-center justify-center shadow-md">
+                      <Icon className="w-4 h-4" />
                     </div>
                     {service.badge && (
-                      <span className="text-[10px] font-extrabold bg-blue-50 text-[#155EEF] px-2 py-0.5 rounded-md border border-blue-200">
+                      <span className="absolute top-2 right-2 text-[10px] font-extrabold bg-[#155EEF] text-white px-2.5 py-1 rounded-md shadow-md border border-white/20">
                         {service.badge}
                       </span>
                     )}
@@ -507,10 +627,16 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* Booking Modal */}
+      {/* Booking Modals */}
       <BookingModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        initialService={selectedServiceForModal}
+      />
+
+      <TatkalBookingModal
+        isOpen={isTatkalModalOpen}
+        onClose={() => setIsTatkalModalOpen(false)}
         initialService={selectedServiceForModal}
       />
     </div>

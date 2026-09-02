@@ -18,6 +18,7 @@ export const StatusBadge = ({ status }) => {
           Confirmed
         </span>
       );
+
     case 'in_progress':
       return (
         <span className="badge-progress">
@@ -47,3 +48,4 @@ export const StatusBadge = ({ status }) => {
       );
   }
 };
+

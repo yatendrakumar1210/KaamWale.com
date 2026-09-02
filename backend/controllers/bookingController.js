@@ -96,22 +96,7 @@ export const createBooking = (req, res) => {
         });
       }
     } else if (bookingType === 'TATKAL') {
-      if (reqDateNorm !== todayStr) {
-        return res.status(400).json({
-          message: "Tatkal booking is available only for today's booking."
-        });
-      }
-
-      // Check 6-hour advance requirement
-      const currentMinutes = now.getHours() * 60 + now.getMinutes();
-      const startMinutes = parseTimeToMinutes(startTime);
-      const diffMinutes = startMinutes - currentMinutes;
-
-      if (diffMinutes < 360) {
-        return res.status(400).json({
-          message: 'Tatkal booking requires at least 6 hours advance notice.'
-        });
-      }
+      // Tatkal urgent booking is active 24x7 for urgent dispatch (+6 hour dispatch SLA)
     }
 
     // Rule 5: Loading / Unloading Rate & Carrying Distance Validation
@@ -120,7 +105,10 @@ export const createBooking = (req, res) => {
     const distanceOpt = carryingDistance && ['20m', '40m', '60m'].includes(carryingDistance) ? carryingDistance : '20m';
 
     if (isLoadingUnloading) {
-      if (!serviceRate || ![4, 6, 8].includes(serviceRate)) {
+      if (!serviceRate) {
+        serviceRate = 4;
+      }
+      if (![4, 6, 8].includes(serviceRate)) {
         return res.status(400).json({
           message: 'Please select a valid rate: ₹4, ₹6, or ₹8.'
         });
@@ -136,21 +124,21 @@ export const createBooking = (req, res) => {
     let labourAmount = 0;
     if (isLoadingUnloading) {
       const bagCount = Math.max(1, parseInt(numberOfBags) || 1);
-      const distanceExtra = distanceOpt === '60m' ? 2 : distanceOpt === '40m' ? 1 : 0;
+      const distanceExtra = distanceOpt === '60m' ? 4 : distanceOpt === '40m' ? 2 : 0;
       const effectiveRate = serviceRate + distanceExtra;
       labourAmount = effectiveRate * bagCount;
     } else if (serviceType === 'hourly' || serviceName.toLowerCase().includes('hourly')) {
-      const hourlyRates = { 2: 400, 4: 600, 6: 700 };
-      const rate = Number(hourlyRate) || hourlyRates[durationHours] || 600;
+      const hourlyRates = { 1: 300, 2: 400, 3: 500, 6: 600 };
+      const rate = Number(hourlyRate) || hourlyRates[durationHours] || 400;
       labourAmount = rate * Math.max(1, parseInt(workerCount) || 1);
     } else {
       const numDays = parseInt(duration) || 1;
-      const baseDailyRate = serviceName.includes('Mistri') ? 950 : 650;
+      const baseDailyRate = bookingType === 'TATKAL' ? 700 : (serviceName.includes('Mistri') ? 950 : 700);
       labourAmount = Math.max(1, parseInt(workerCount) || 1) * numDays * baseDailyRate;
     }
 
     const transportationCharge = 50; // Mandatory ₹50 transportation charge
-    const tatkalCharge = bookingType === 'TATKAL' ? 200 : 0;
+    const tatkalCharge = bookingType === 'TATKAL' ? 150 : 0;
     const totalAmount = labourAmount + transportationCharge + tatkalCharge;
 
     const booking = store.createBooking({

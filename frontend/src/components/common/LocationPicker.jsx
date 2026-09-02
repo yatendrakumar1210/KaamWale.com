@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
 import { MapPin, Navigation, Home, Search, RefreshCw, CheckCircle2, AlertTriangle, X } from 'lucide-react';
 
-export const LocationPicker = ({ selectedLocation, onSelectLocation }) => {
+export const LocationPicker = ({ selectedLocation, onSelectLocation = () => {}, onLocationSelect = () => {} }) => {
   const [activeTab, setActiveTab] = useState('current'); // 'current' | 'home' | 'search'
   const [detecting, setDetecting] = useState(false);
   const [gpsError, setGpsError] = useState('');
   const [tempGpsLocation, setTempGpsLocation] = useState(null);
+
+  const handleSelect = (loc) => {
+    if (typeof onSelectLocation === 'function') {
+      onSelectLocation(loc);
+    }
+    if (typeof onLocationSelect === 'function') {
+      onLocationSelect(loc);
+    }
+  };
 
   // Home location state
   const [homeAddress, setHomeAddress] = useState(
@@ -63,7 +72,7 @@ export const LocationPicker = ({ selectedLocation, onSelectLocation }) => {
 
   const confirmGpsLocation = () => {
     if (tempGpsLocation) {
-      onSelectLocation(tempGpsLocation);
+      handleSelect(tempGpsLocation);
     }
   };
 
@@ -77,7 +86,7 @@ export const LocationPicker = ({ selectedLocation, onSelectLocation }) => {
     localStorage.setItem('kaamwale_home_lat', String(lat));
     localStorage.setItem('kaamwale_home_lng', String(lng));
 
-    onSelectLocation({
+    handleSelect({
       address: addr,
       latitude: lat,
       longitude: lng
@@ -96,7 +105,7 @@ export const LocationPicker = ({ selectedLocation, onSelectLocation }) => {
       ? searchInput.trim()
       : `${searchInput.trim()}, Bulandshahr, Uttar Pradesh`;
 
-    onSelectLocation({
+    handleSelect({
       address: formattedAddr,
       latitude: lat,
       longitude: lng
@@ -121,7 +130,7 @@ export const LocationPicker = ({ selectedLocation, onSelectLocation }) => {
           </div>
           <button
             type="button"
-            onClick={() => onSelectLocation(null)}
+            onClick={() => handleSelect(null)}
             className="px-3 py-1 bg-white border border-emerald-300 hover:bg-emerald-50 text-emerald-800 text-xs font-bold rounded-lg transition-colors shadow-2xs"
           >
             Change Location

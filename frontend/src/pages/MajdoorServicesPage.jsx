@@ -20,37 +20,41 @@ import {
   Info,
   ChevronLeft,
   MessageCircle,
-  Phone
+  Phone,
+  Zap
 } from 'lucide-react';
 import { BookingModal } from '../components/common/BookingModal';
+import { TatkalBookingModal } from '../components/common/TatkalBookingModal';
 
 export const MajdoorServicesPage = () => {
   const { selectedCity } = useCity();
   const [selectedService, setSelectedService] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTatkalModalOpen, setIsTatkalModalOpen] = useState(false);
 
   const PHONE_NUMBER = KAAMWALE_PHONE;
   const DISPLAY_PHONE = '+91 63958 82126';
 
   const majdoorServices = [
-    { name: 'Construction Labour', icon: Building2, rate: 700, desc: 'Concrete mixing, lintel casting, brick carrying, site helper work.', popular: true },
-    { name: 'Loading / Unloading', icon: Truck, rate: 5, desc: 'Heavy lifting for trucks, containers, godowns & freight.', popular: true },
-    { name: 'House Shifting Labour', icon: PackageCheck, rate: 700, desc: 'Dedicated helpers for household packing, loading & moving.', popular: true },
-    { name: 'Agriculture / Farm Labour', icon: Wheat, rate: 650, desc: 'Crop harvesting, field preparation, sowing, & farm work.' },
-    { name: 'Cleaning Labour', icon: UserCheck, rate: 600, desc: 'Site debris cleanup, post-construction washing, deep cleaning.' },
-    { name: 'Building Material Labour', icon: Building, rate: 700, desc: 'Cement bags, sand, gravel, stone dust loading & unloading.' },
-    { name: 'Road Work Labour', icon: Construction, rate: 700, desc: 'Tar paving, gutter excavation, pipe laying civil helpers.' },
-    { name: 'Digging / Excavation Labour', icon: Shovel, rate: 700, desc: 'Manual trench digging, foundation excavation & pit digging.' },
-    { name: 'Gardening Labour', icon: Wheat, rate: 550, desc: 'Lawn digging, soil levelling, weeding & tree trimming.' },
-    { name: 'Factory / Industrial Labour', icon: Factory, rate: 600, desc: 'Assembly line assistance, packing, shifting & factory helpers.' },
-    { name: 'Warehouse Labour', icon: Boxes, rate: 600, desc: 'Goods stacking, inventory sorting, packing & dispatch staff.' },
-    { name: 'Event / Tent Labour', icon: Tent, rate: 550, desc: 'Wedding tent setup, chair arrangement, stage work & catering helpers.' },
-    { name: 'General Helper', icon: UserCheck, rate: 550, desc: 'Daily wage helper for shop, office, home or miscellaneous work.' },
-    { name: 'Demolition Labour', icon: Hammer, rate: 700, desc: 'Manual wall breaking, concrete chipping & debris removal.' }
+    { name: 'Construction Labour', icon: Building2, image: '/images/construction_worker.png', rate: 700, desc: 'Concrete mixing, lintel casting, brick carrying, site helper work.', popular: true },
+    { name: 'Loading / Unloading', icon: Truck, image: '/images/loading_worker.png', rate: 4, desc: 'Heavy lifting for trucks, containers, godowns & freight.', popular: true },
+    { name: 'House Shifting Labour', icon: PackageCheck, image: '/images/shifting_worker.png', rate: 700, desc: 'Dedicated helpers for household packing, loading & moving.', popular: true },
+    { name: 'Agriculture / Farm Labour', icon: Wheat, image: '/images/farm_worker.png', rate: 700, desc: 'Crop harvesting, field preparation, sowing, & farm work.' },
+    { name: 'Cleaning Labour', icon: UserCheck, image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80', rate: 700, desc: 'Site debris cleanup, post-construction washing, deep cleaning.' },
+    { name: 'Building Material Labour', icon: Building, image: '/images/construction_worker.png', rate: 700, desc: 'Cement bags, sand, gravel, stone dust loading & unloading.' },
+    { name: 'Road Work Labour', icon: Construction, image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80', rate: 700, desc: 'Tar paving, gutter excavation, pipe laying civil helpers.' },
+    { name: 'Digging / Excavation Labour', icon: Shovel, image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80', rate: 700, desc: 'Manual trench digging, foundation excavation & pit digging.' },
+    { name: 'Gardening Labour', icon: Wheat, image: '/images/farm_worker.png', rate: 700, desc: 'Lawn digging, soil levelling, weeding & tree trimming.' },
+    { name: 'Factory / Industrial Labour', icon: Factory, image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=80', rate: 700, desc: 'Assembly line assistance, packing, shifting & factory helpers.' },
+    { name: 'Warehouse Labour', icon: Boxes, image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=80', rate: 700, desc: 'Goods stacking, inventory sorting, packing & dispatch staff.' },
+    { name: 'Event / Tent Labour', icon: Tent, image: '/images/shifting_worker.png', rate: 700, desc: 'Wedding tent setup, chair arrangement, stage work & catering helpers.' },
+    { name: 'General Helper', icon: UserCheck, image: '/images/general_worker.png', rate: 700, desc: 'Daily wage helper for shop, office, home or miscellaneous work.' },
+    { name: 'Demolition Labour', icon: Hammer, image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80', rate: 700, desc: 'Manual wall breaking, concrete chipping & debris removal.' }
   ];
 
-  const handleBookService = (service) => {
+  const handleBookService = (service, bookingType = 'NORMAL') => {
     setSelectedService(service);
+    setModalBookingType(bookingType);
     setIsModalOpen(true);
   };
 
@@ -110,13 +114,23 @@ export const MajdoorServicesPage = () => {
           </p>
         </div>
 
-        <button
-          onClick={() => handleBookService({ name: 'General Construction Labour', rate: 600 })}
-          className="bg-amber-400 hover:bg-amber-300 text-slate-950 font-black px-6 py-3.5 rounded-xl shadow-lg transition-all text-sm shrink-0 flex items-center gap-2"
-        >
-          <span>⚡ Book Labour Now</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
+        <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+          <button
+            onClick={() => setIsTatkalModalOpen(true)}
+            className="bg-amber-400 hover:bg-amber-300 text-slate-950 font-black px-5 py-3.5 rounded-xl shadow-lg transition-all text-xs sm:text-sm flex items-center justify-center gap-1.5 border border-amber-300"
+          >
+            <Zap className="w-4 h-4 fill-slate-950" />
+            <span>⚡ Book Tatkal Labour</span>
+          </button>
+
+          <button
+            onClick={() => handleBookService({ name: 'General Construction Labour', rate: 700 })}
+            className="bg-white/10 hover:bg-white/20 text-white font-bold px-5 py-3.5 rounded-xl transition-all text-xs sm:text-sm flex items-center justify-center gap-1.5 border border-white/20"
+          >
+            <span>Book Standard</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {/* Info Notice Box */}
@@ -139,15 +153,22 @@ export const MajdoorServicesPage = () => {
               key={service.name}
               className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-[#155EEF] hover:shadow-xl transition-all group flex flex-col justify-between h-full relative overflow-hidden"
             >
-              {service.popular && (
-                <span className="absolute top-3 right-3 text-[10px] font-bold bg-blue-50 text-[#155EEF] border border-blue-200 px-2 py-0.5 rounded">
-                  Popular
-                </span>
-              )}
-
               <div>
-                <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <IconComponent className="w-6 h-6" />
+                <div className="relative mb-4 overflow-hidden rounded-xl h-36 bg-slate-100 border border-slate-200 shadow-inner">
+                  <img 
+                    src={service.image} 
+                    alt={service.name} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
+                  <div className="absolute top-2 left-2 w-8 h-8 rounded-lg bg-white/90 backdrop-blur-md text-amber-600 border border-white/40 flex items-center justify-center shadow-md">
+                    <IconComponent className="w-4 h-4" />
+                  </div>
+                  {service.popular && (
+                    <span className="absolute top-2 right-2 text-[10px] font-extrabold bg-[#155EEF] text-white px-2.5 py-1 rounded-md shadow-md border border-white/20">
+                      Popular
+                    </span>
+                  )}
                 </div>
 
                 <h3 className="font-bold text-slate-900 text-base group-hover:text-[#155EEF] transition-colors">
@@ -187,6 +208,12 @@ export const MajdoorServicesPage = () => {
       <BookingModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        initialService={selectedService}
+      />
+
+      <TatkalBookingModal
+        isOpen={isTatkalModalOpen}
+        onClose={() => setIsTatkalModalOpen(false)}
         initialService={selectedService}
       />
     </div>

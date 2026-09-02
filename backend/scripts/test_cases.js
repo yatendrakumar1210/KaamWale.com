@@ -123,7 +123,7 @@ async function runTests() {
       `CASE 3: Tatkal late-night <6h check -> REJECT correctly`, `Status: ${res3.status}, Msg: "${res3.body.message}"`);
   }
 
-  // CASE 4: Tatkal today, 5 hours before start -> REJECT
+  // CASE 4: Tatkal urgent booking -> ACCEPT 201
   const res4 = await makeMockReq({
     bookingType: 'TATKAL',
     serviceName: 'Construction Labour',
@@ -132,8 +132,8 @@ async function runTests() {
     startTime: '01:00 PM',
     address: 'Bulandshahr Site 4'
   });
-  assert(res4.status === 400 && res4.body.message?.includes('6 hours advance notice'),
-    `CASE 4: Tatkal today, 5 hours before start -> REJECT`, `Status: ${res4.status}, Start: 01:00 PM, Msg: "${res4.body.message}"`);
+  assert(res4.status === 201,
+    `CASE 4: Tatkal urgent booking -> ACCEPT 201`, `Status: ${res4.status}, Total: ₹${res4.body.totalAmount}`);
 
   // CASE 5: Normal booking -> ₹50 transportation added
   const res5 = await makeMockReq({
@@ -147,7 +147,7 @@ async function runTests() {
   assert(res5.status === 201 && res5.body.transportationCharge === 50 && res5.body.totalAmount === (res5.body.labourAmount + 50),
     `CASE 5: Normal booking -> ₹50 transportation added`, `Labour: ₹${res5.body.labourAmount}, Trans: ₹${res5.body.transportationCharge}, Total: ₹${res5.body.totalAmount}`);
 
-  // CASE 6: Tatkal booking -> ₹50 transportation + ₹200 Tatkal charge
+  // CASE 6: Tatkal booking -> ₹50 transportation + ₹150 Tatkal charge
   if (!isLateNight) {
     const res6 = await makeMockReq({
       bookingType: 'TATKAL',
@@ -158,11 +158,11 @@ async function runTests() {
       startTime: time7hStr,
       address: 'Bulandshahr Site 6'
     });
-    assert(res6.status === 201 && res6.body.transportationCharge === 50 && res6.body.tatkalCharge === 200 && res6.body.totalAmount === (res6.body.labourAmount + 50 + 200),
-      `CASE 6: Tatkal booking -> ₹50 trans + ₹200 Tatkal`, `Labour: ₹${res6.body.labourAmount}, Trans: ₹${res6.body.transportationCharge}, Tatkal: ₹${res6.body.tatkalCharge}, Total: ₹${res6.body.totalAmount}`);
+    assert(res6.status === 201 && res6.body.transportationCharge === 50 && res6.body.tatkalCharge === 150 && res6.body.totalAmount === (res6.body.labourAmount + 50 + 150),
+      `CASE 6: Tatkal booking -> ₹50 trans + ₹150 Tatkal`, `Labour: ₹${res6.body.labourAmount}, Trans: ₹${res6.body.transportationCharge}, Tatkal: ₹${res6.body.tatkalCharge}, Total: ₹${res6.body.totalAmount}`);
   } else {
     // Perform simulated pricing calculation test for Tatkal
-    console.log('✅ PASS: CASE 6: Tatkal booking -> ₹50 trans + ₹200 Tatkal (Verified pricing logic: Labour + 50 + 200)');
+    console.log('✅ PASS: CASE 6: Tatkal booking -> ₹50 trans + ₹150 Tatkal (Verified pricing logic: Labour + 50 + 150)');
     passed++;
   }
 
@@ -222,7 +222,7 @@ async function runTests() {
   assert(res10.status === 400 && res10.body.message?.includes('Please select a valid rate: ₹4, ₹6, or ₹8.'),
     `CASE 10: Loading/Unloading ₹5 -> REJECT`, `Status: ${res10.status}, Msg: "${res10.body.message}"`);
 
-  // CASE 11: Carrying Distance 40m (+₹1/bag) -> ACCEPT
+  // CASE 11: Carrying Distance 40m (+₹2/bag) -> ACCEPT
   const res11 = await makeMockReq({
     bookingType: 'NORMAL',
     serviceName: 'Loading / Unloading',
@@ -234,10 +234,10 @@ async function runTests() {
     date: tomorrowStr,
     address: 'Bulandshahr Site 11'
   });
-  assert(res11.status === 201 && res11.body.labourAmount === 700 && res11.body.carryingDistance === '40m',
-    `CASE 11: Carrying Distance 40m (+₹1/bag) -> ACCEPT`, `Labour: ₹${res11.body.labourAmount}, Total: ₹${res11.body.totalAmount}`);
+  assert(res11.status === 201 && res11.body.labourAmount === 800 && res11.body.carryingDistance === '40m',
+    `CASE 11: Carrying Distance 40m (+₹2/bag) -> ACCEPT`, `Labour: ₹${res11.body.labourAmount}, Total: ₹${res11.body.totalAmount}`);
 
-  // CASE 12: Carrying Distance 60m (+₹2/bag) -> ACCEPT
+  // CASE 12: Carrying Distance 60m (+₹4/bag) -> ACCEPT
   const res12 = await makeMockReq({
     bookingType: 'NORMAL',
     serviceName: 'Loading / Unloading',
@@ -249,8 +249,8 @@ async function runTests() {
     date: tomorrowStr,
     address: 'Bulandshahr Site 12'
   });
-  assert(res12.status === 201 && res12.body.labourAmount === 800 && res12.body.carryingDistance === '60m',
-    `CASE 12: Carrying Distance 60m (+₹2/bag) -> ACCEPT`, `Labour: ₹${res12.body.labourAmount}, Total: ₹${res12.body.totalAmount}`);
+  assert(res12.status === 201 && res12.body.labourAmount === 1000 && res12.body.carryingDistance === '60m',
+    `CASE 12: Carrying Distance 60m (+₹4/bag) -> ACCEPT`, `Labour: ₹${res12.body.labourAmount}, Total: ₹${res12.body.totalAmount}`);
 
   // CASE 13: Invalid Carrying Distance 100m -> REJECT
   const res13 = await makeMockReq({

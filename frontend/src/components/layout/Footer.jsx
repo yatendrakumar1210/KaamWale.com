@@ -21,20 +21,21 @@ export const Footer = () => {
           {/* Brand Info */}
           <div className="space-y-4 md:col-span-1">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#155EEF] flex items-center justify-center text-amber-400 font-bold">
-                <HardHat className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-xl bg-white p-1 shadow-md border border-slate-700 overflow-hidden flex items-center justify-center shrink-0">
+                <img src="/logo.png" alt="KaamWale Logo" className="w-full h-full object-contain" />
               </div>
-              <span className="text-2xl font-black text-white">
-                Kaam<span className="text-[#155EEF]">Wale</span><span className="text-[#F59E0B]">.com</span>
-              </span>
+              <div>
+                <span className="text-2xl font-black text-white block leading-none">
+                  Kaam<span className="text-[#F59E0B]">Wale</span>
+                </span>
+                <span className="text-xs font-extrabold text-amber-400 uppercase tracking-wide block mt-1">
+                  हर काम के लिए (Har Kaam Ke Liye)
+                </span>
+              </div>
             </div>
 
-            <p className="text-xs font-extrabold uppercase tracking-wider text-amber-400">
-              हर काम के लिए कामवाले (Har Kaam Ke Liye KaamWale)
-            </p>
-
             <p className="text-xs text-slate-400 leading-relaxed">
-              Book reliable, verified labour services for construction, shifting, loading, farming, and general daily work in your city. Safe, punctual & hassle-free.
+              TRUSTED LABOUR. ON TIME. EVERY TIME. Book reliable, verified labour services for construction, shifting, loading, farming, and general daily work. Safe, punctual & hassle-free.
             </p>
 
             <div className="flex items-center gap-2 text-xs text-emerald-400 bg-emerald-950/60 border border-emerald-800/80 px-3 py-2 rounded-xl">
@@ -117,7 +118,7 @@ export const Footer = () => {
 
         {/* Bottom copyright */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© 2026 KaamWale.com. All rights reserved.</p>
+          <p>© 2026 KaamWale. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <span className="hover:underline cursor-pointer">Privacy Policy</span>
             <span className="hover:underline cursor-pointer">Terms & Conditions</span>

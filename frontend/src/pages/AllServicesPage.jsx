@@ -22,6 +22,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { BookingModal } from '../components/common/BookingModal';
+import { TatkalBookingModal } from '../components/common/TatkalBookingModal';
 
 export const AllServicesPage = () => {
   const { selectedCity } = useCity();
@@ -29,17 +30,18 @@ export const AllServicesPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedService, setSelectedService] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTatkalModalOpen, setIsTatkalModalOpen] = useState(false);
 
   const PHONE_NUMBER = KAAMWALE_PHONE;
 
   const services = [
     // Majdoor / Labour — ACTIVE NOW
-    { name: 'General Labour', category: 'majdoor', icon: HardHat, status: 'active', rate: 550, desc: 'Site cleanup, manual helper tasks, daily wage labour.' },
-    { name: 'Construction Labour', category: 'majdoor', icon: Building2, status: 'active', rate: 650, desc: 'Concrete mixing, brick carrying, scaffolding assistance.', popular: true },
-    { name: 'Loading / Unloading', category: 'majdoor', icon: HardHat, status: 'active', rate: 5, desc: 'Heavy goods lifting for trucks, containers & warehouses.', popular: true },
-    { name: 'House Shifting Labour', category: 'majdoor', icon: HardHat, status: 'active', rate: 600, desc: 'Household furniture moving, packing & lifting helpers.' },
-    { name: 'Farm Labour', category: 'majdoor', icon: HardHat, status: 'active', rate: 550, desc: 'Crop harvesting, soil prep, farming helper work.' },
-    { name: 'Digging / Excavation', category: 'majdoor', icon: HardHat, status: 'active', rate: 600, desc: 'Trench digging, foundation excavation & pit digging.' },
+    { name: 'General Labour', category: 'majdoor', icon: HardHat, image: '/images/general_worker.png', status: 'active', rate: 700, desc: 'Site cleanup, manual helper tasks, daily wage labour.' },
+    { name: 'Construction Labour', category: 'majdoor', icon: Building2, image: '/images/construction_worker.png', status: 'active', rate: 700, desc: 'Concrete mixing, brick carrying, scaffolding assistance.', popular: true },
+    { name: 'Loading / Unloading', category: 'majdoor', icon: HardHat, image: '/images/loading_worker.png', status: 'active', rate: 4, desc: 'Heavy goods lifting for trucks, containers & warehouses.', popular: true },
+    { name: 'House Shifting Labour', category: 'majdoor', icon: HardHat, image: '/images/shifting_worker.png', status: 'active', rate: 700, desc: 'Household furniture moving, packing & lifting helpers.' },
+    { name: 'Farm Labour', category: 'majdoor', icon: HardHat, image: '/images/farm_worker.png', status: 'active', rate: 700, desc: 'Crop harvesting, soil prep, farming helper work.' },
+    { name: 'Digging / Excavation', category: 'majdoor', icon: HardHat, image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80', status: 'active', rate: 700, desc: 'Trench digging, foundation excavation & pit digging.' },
 
     // Mistri — COMING SOON
     { name: 'Raj Mistri (Mason)', category: 'mistri', icon: Building2, status: 'coming_soon', desc: 'Master mason for brickwork, wall structure & stone masonry.' },
@@ -177,22 +179,45 @@ export const AllServicesPage = () => {
               }`}
             >
               <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold ${
-                    isActive ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-slate-100 text-slate-400'
-                  }`}>
-                    <IconComp className="w-6 h-6" />
+                {service.image ? (
+                  <div className="relative mb-4 overflow-hidden rounded-xl h-36 bg-slate-100 border border-slate-200 shadow-inner">
+                    <img 
+                      src={service.image} 
+                      alt={service.name} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
+                    <div className="absolute top-2 left-2 w-8 h-8 rounded-lg bg-white/90 backdrop-blur-md text-amber-600 border border-white/40 flex items-center justify-center shadow-md">
+                      <IconComp className="w-4 h-4" />
+                    </div>
+                    {isActive ? (
+                      <span className="absolute top-2 right-2 text-[10px] uppercase font-black px-2.5 py-1 rounded-md bg-emerald-600 text-white shadow-md border border-white/20 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Active Now
+                      </span>
+                    ) : (
+                      <span className="absolute top-2 right-2 text-[10px] uppercase font-black px-2.5 py-1 rounded-md bg-amber-500 text-white shadow-md border border-white/20 flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-white" /> Coming Soon
+                      </span>
+                    )}
                   </div>
-                  {isActive ? (
-                    <span className="text-[10px] uppercase font-black px-2.5 py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Active Now
-                    </span>
-                  ) : (
-                    <span className="text-[10px] uppercase font-black px-2.5 py-1 rounded bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-amber-500" /> Coming Soon
-                    </span>
-                  )}
-                </div>
+                ) : (
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold ${
+                      isActive ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-slate-100 text-slate-400'
+                    }`}>
+                      <IconComp className="w-6 h-6" />
+                    </div>
+                    {isActive ? (
+                      <span className="text-[10px] uppercase font-black px-2.5 py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Active Now
+                      </span>
+                    ) : (
+                      <span className="text-[10px] uppercase font-black px-2.5 py-1 rounded bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-amber-500" /> Coming Soon
+                      </span>
+                    )}
+                  </div>
+                )}
 
                 <h3 className="text-lg font-bold text-slate-900">
                   {service.name}
@@ -240,6 +265,12 @@ export const AllServicesPage = () => {
       <BookingModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        initialService={selectedService}
+      />
+
+      <TatkalBookingModal
+        isOpen={isTatkalModalOpen}
+        onClose={() => setIsTatkalModalOpen(false)}
         initialService={selectedService}
       />
     </div>
