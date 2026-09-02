@@ -99,5 +99,5 @@ export const buildWhatsAppMessage = (options = {}) => {
   return encodeURIComponent(message);
 };
 
-export const KAAMWALE_PHONE = '+916395882126';
+export const KAAMWALE_PHONE = '+919762658206';
 

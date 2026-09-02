@@ -7,7 +7,7 @@ export const MobileNav = () => {
   const { selectedCity } = useCity();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const PHONE_NUMBER = '+916395882126';
+  const PHONE_NUMBER = '+919762658206';
 
   const handleWhatsApp = () => {
     const text = encodeURIComponent(

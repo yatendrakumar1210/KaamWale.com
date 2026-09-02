@@ -5,7 +5,7 @@ import { buildWhatsAppMessage, KAAMWALE_PHONE } from '../../services/whatsappHel
 
 export const Footer = () => {
   const PHONE_NUMBER = KAAMWALE_PHONE;
-  const DISPLAY_PHONE = '+91 63958 82126';
+  const DISPLAY_PHONE = '+91 97626 58206';
 
   const openWhatsApp = () => {
     const msg = buildWhatsAppMessage();

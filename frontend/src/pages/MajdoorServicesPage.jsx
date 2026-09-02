@@ -33,7 +33,7 @@ export const MajdoorServicesPage = () => {
   const [isTatkalModalOpen, setIsTatkalModalOpen] = useState(false);
 
   const PHONE_NUMBER = KAAMWALE_PHONE;
-  const DISPLAY_PHONE = '+91 63958 82126';
+  const DISPLAY_PHONE = '+91 97626 58206';
 
   const majdoorServices = [
     { name: 'Construction Labour', icon: Building2, image: '/images/construction_worker.png', rate: 700, desc: 'Concrete mixing, lintel casting, brick carrying, site helper work.', popular: true },

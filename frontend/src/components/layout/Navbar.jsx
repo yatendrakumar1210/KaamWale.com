@@ -15,7 +15,7 @@ export const Navbar = () => {
   const location = useLocation();
 
   const PHONE_NUMBER = KAAMWALE_PHONE;
-  const DISPLAY_PHONE = '+91 63958 82126';
+  const DISPLAY_PHONE = '+91 97626 58206';
 
   const isActive = (path) => location.pathname === path;
 
