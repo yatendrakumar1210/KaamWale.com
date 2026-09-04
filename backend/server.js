@@ -38,21 +38,22 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Serve static build from frontend/dist
-const distPath = path.join(__dirname, '../frontend/dist');
-app.use(express.static(distPath));
+// Serve static build from frontend/dist (only for non-Vercel environments)
+if (!process.env.VERCEL) {
+  const distPath = path.join(__dirname, '../frontend/dist');
+  app.use(express.static(distPath));
 
-// Fallback to index.html for React Router SPA routes
-app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api')) {
-    return next();
-  }
-  res.sendFile(path.join(distPath, 'index.html'), (err) => {
-    if (err) {
-      next();
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) {
+      return next();
     }
+    res.sendFile(path.join(distPath, 'index.html'), (err) => {
+      if (err) {
+        next();
+      }
+    });
   });
-});
+}
 
 // Error handling middleware
 app.use((err, req, res, next) => {
