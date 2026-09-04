@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import authRoutes from './routes/authRoutes.js';
 import serviceRoutes from './routes/serviceRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
@@ -10,6 +12,9 @@ import cityRoutes from './routes/cityRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -30,6 +35,22 @@ app.get('/api/health', (req, res) => {
     status: 'online',
     app: 'LabourChowk.com Backend API',
     time: new Date().toISOString()
+  });
+});
+
+// Serve static build from frontend/dist
+const distPath = path.join(__dirname, '../frontend/dist');
+app.use(express.static(distPath));
+
+// Fallback to index.html for React Router SPA routes
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return next();
+  }
+  res.sendFile(path.join(distPath, 'index.html'), (err) => {
+    if (err) {
+      next();
+    }
   });
 });
 
