@@ -103,7 +103,7 @@ export const HomePage = () => {
               {/* TOP BADGE */}
               <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-1.5 rounded-full text-xs font-semibold text-amber-300">
                 <ShieldCheck className="w-4 h-4 text-amber-400" />
-                <span>Verified City Operations • Bulandshahr, UP</span>
+                <span>City of Operations • Bulandshahr, UP</span>
               </div>
 
               {/* MAIN TITLE */}
@@ -111,6 +111,11 @@ export const HomePage = () => {
                 Kaam<span className="text-[#155EEF]">Wale</span> <br />
                 <span className="text-[#F59E0B] text-3xl sm:text-5xl font-extrabold block mt-1">
                   हर काम के लिए विश्वसनीय
+                </span>
+                <span className="text-[#F59E0B] text-3xl sm:text-5xl font-extrabold block mt-1">
+                  <span className="text-[#f4f6ee] text-3xl sm:text-5xl font-extrabold block mt-1">
+                    घंटे एवं दैनिक आधार पर
+                  </span>
                 </span>
               </h1>
 
@@ -125,14 +130,11 @@ export const HomePage = () => {
               {/* 2 FAST BOOKING OPTIONS BANNER */}
               <div className="bg-white/10 backdrop-blur-md border border-white/15 p-5 sm:p-6 rounded-2xl max-w-xl mx-auto lg:mx-0 space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-amber-400" /> INSTANT
+                  <span className="text-xl font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4  text-amber-400" /> INSTANT
                     LABOUR BOOKING
                   </span>
-                  <span className="text-xs text-slate-300 font-semibold flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-amber-400" />{" "}
-                    Bulandshahr Only
-                  </span>
+                  <span className="text-xs text-slate-300 font-semibold flex items-center gap-1"></span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
@@ -142,7 +144,7 @@ export const HomePage = () => {
                     className="w-full py-3.5 px-4 bg-[#25D366] hover:bg-[#20BD5A] text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-sm active:scale-98"
                   >
                     <MessageCircle className="w-5 h-5 fill-current" />
-                    <span className="text-sm font-extrabold">
+                    <span className="text-2xl font-extrabold">
                       Book via WhatsApp
                     </span>
                   </button>
@@ -153,13 +155,13 @@ export const HomePage = () => {
                     className="w-full py-3.5 px-4 bg-[#155EEF] hover:bg-[#1254D4] text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-sm active:scale-98"
                   >
                     <Phone className="w-5 h-5" />
-                    <span className="text-sm font-extrabold">
+                    <span className="text-2xl font-extrabold">
                       Call Us: {DISPLAY_PHONE}
                     </span>
                   </button>
                 </div>
 
-                <p className="text-[11px] text-slate-400 text-center">
+                <p className="text-[15px] text-slate-400 text-center">
                   ⚡ Operations team arranges verified workers at your site
                   within 60 minutes!
                 </p>
@@ -170,7 +172,11 @@ export const HomePage = () => {
             <div className="lg:col-span-5 flex justify-center">
               <div className="bg-white/10 backdrop-blur-lg border border-white/20 p-6 sm:p-8 rounded-3xl text-center space-y-5 max-w-md w-full shadow-2xl relative">
                 <div className="w-24 h-24 mx-auto rounded-3xl bg-white p-2 flex items-center justify-center text-slate-900 shadow-2xl border-2 border-amber-400 overflow-hidden transform hover:scale-105 transition-transform">
-                  <img src="/logo.png" alt="KaamWale Official Logo" className="w-full h-full object-contain" />
+                  <img
+                    src="/logo.png"
+                    alt="KaamWale Official Logo"
+                    className="w-full h-full object-contain"
+                  />
                 </div>
 
                 <div>
@@ -221,7 +227,6 @@ export const HomePage = () => {
         </div>
       </section>
 
-
       {/* SECTION: HOURLY BOOKING REVISED CARDS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-3xl p-6 sm:p-8">
@@ -232,7 +237,7 @@ export const HomePage = () => {
                 अपडेटेड प्रति घंटा दरें (Revised Hourly Rates)
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                ⏱️ Hourly Labour Booking (प्रति घंटा बुकिंग)
+                ⏱️ Hourly Labour Booking (घंटे के हिसाब से बुकिंग)
               </h2>
               <p className="text-sm text-slate-600 mt-1">
                 छोटे काम के लिए सीमित समय के लिए मजदूर बुक करें — पारदर्शी दरों
@@ -278,7 +283,7 @@ export const HomePage = () => {
                 price: 500,
                 emoji: "🕒",
               },
-            ,
+              ,
             ].map((slot) => (
               <button
                 key={slot.hours}
@@ -372,25 +377,34 @@ export const HomePage = () => {
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8 relative z-10">
             <div className="space-y-4 max-w-2xl text-center lg:text-left">
               <div className="inline-flex items-center gap-2 bg-amber-500/20 text-amber-300 border border-amber-500/40 px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider">
-                <Zap className="w-4 h-4 text-amber-400 fill-amber-400" />
-                ⚡ Tatkal Booking Section (तत्काल मजदूर सेवा)
+                <Zap className="w-4 h-4 text-amber-400 fill-amber-400" />⚡
+                Tatkal Booking Section (तत्काल मजदूर सेवा)
               </div>
               <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white leading-tight">
                 Need Labour Urgently Today? <br />
-                <span className="text-amber-400">Workers Arrange Within 6 Hours!</span>
+                <span className="text-amber-400"></span>
               </h2>
               <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-                Emergency work at your site? Select <strong>Tatkal Booking</strong> for high-priority same-day allocation. Our operations team dispatches verified labourers to your location in Bulandshahr within 6 hours.
+                Emergency work at your site? Select{" "}
+                <strong>Tatkal Booking</strong> for high-priority same-day
+                allocation. Our operations team dispatches verified labourers to
+                your location in Bulandshahr within 6 hours.
               </p>
 
               <div className="grid grid-cols-2 gap-3 pt-2 text-xs">
                 <div className="bg-slate-900/90 border border-amber-500/30 p-3 rounded-xl">
-                  <span className="font-extrabold text-amber-400 block text-sm">⚡ Same Day Service</span>
+                  <span className="font-extrabold text-amber-400 block text-sm">
+                    ⚡ Same Day Service
+                  </span>
                   <span className="text-slate-400">Today booking</span>
                 </div>
                 <div className="bg-slate-900/90 border border-amber-500/30 p-3 rounded-xl">
-                  <span className="font-extrabold text-amber-400 block text-sm">💰 Clear Pricing</span>
-                  <span className="text-slate-400">Rate + ₹50 trans + ₹150</span>
+                  <span className="font-extrabold text-amber-400 block text-sm">
+                    💰 Clear Pricing
+                  </span>
+                  <span className="text-slate-400">
+                    Rate + ₹50 trans + ₹150
+                  </span>
                 </div>
               </div>
             </div>
@@ -405,7 +419,7 @@ export const HomePage = () => {
               </button>
 
               <button
-                onClick={() => openWhatsAppDirect('Tatkal Urgent Labour')}
+                onClick={() => openWhatsAppDirect("Tatkal Urgent Labour")}
                 className="py-3.5 px-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md"
               >
                 <MessageCircle className="w-4 h-4 fill-current" />
@@ -456,9 +470,9 @@ export const HomePage = () => {
               >
                 <div>
                   <div className="relative mb-4 overflow-hidden rounded-xl h-40 bg-slate-100 border border-slate-200 shadow-inner">
-                    <img 
-                      src={service.image} 
-                      alt={service.name} 
+                    <img
+                      src={service.image}
+                      alt={service.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
