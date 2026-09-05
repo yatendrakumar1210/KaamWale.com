@@ -165,6 +165,7 @@ export const BookingWizardPage = () => {
   const isHourly = formData.serviceName.toLowerCase().includes('hourly');
   const baseRate = formData.bookingType === 'TATKAL' ? 700 : getCategoryRate(formData.serviceName);
   const baseBagRate = 4;
+  const distanceExtra = formData.carryingDistance === '60m' ? 4 : formData.carryingDistance === '40m' ? 2 : 0;
   const effectiveRate = baseBagRate + distanceExtra;
   
   let labourAmount = 0;

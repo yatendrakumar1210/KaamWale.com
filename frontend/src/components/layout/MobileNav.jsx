@@ -3,18 +3,14 @@ import { Home, HardHat, Phone, MessageCircle, MapPin } from 'lucide-react';
 import { useCity } from '../../context/CityContext';
 import { BookingModal } from '../common/BookingModal';
 
+import { openWhatsApp } from '../../services/whatsappHelper';
+
 export const MobileNav = () => {
   const { selectedCity } = useCity();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const PHONE_NUMBER = '+919762658206';
-
   const handleWhatsApp = () => {
-    const text = encodeURIComponent(
-      `🏗️ नमस्ते KaamWale!\n\nमुझे बुलंदशहर में मजदूर चाहिए।\nकृपया उपलब्ध मजदूरों की जानकारी दें।\nधन्यवाद! 🙏`
-    );
-    const cleanPhone = PHONE_NUMBER.replace(/\D/g, '');
-    window.open(`https://wa.me/${cleanPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
+    openWhatsApp();
   };
 
   const handleCall = () => {

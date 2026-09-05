@@ -101,3 +101,17 @@ export const buildWhatsAppMessage = (options = {}) => {
 
 export const KAAMWALE_PHONE = '+919762658206';
 
+export const openWhatsApp = (options = {}) => {
+  if (typeof options === 'string') {
+    const isTatkal = options.toLowerCase().includes('tatkal');
+    options = { serviceName: options, bookingType: isTatkal ? 'TATKAL' : 'NORMAL' };
+  }
+  const msg = buildWhatsAppMessage(options);
+  const cleanPhone = KAAMWALE_PHONE.replace(/\D/g, '');
+  const url = `https://wa.me/${cleanPhone}?text=${msg}`;
+  const win = window.open(url, '_blank', 'noopener,noreferrer');
+  if (!win || win.closed || typeof win.closed === 'undefined') {
+    window.location.href = url;
+  }
+};
+

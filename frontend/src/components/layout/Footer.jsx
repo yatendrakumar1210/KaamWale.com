@@ -1,16 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { HardHat, ShieldCheck, PhoneCall, Mail, MapPin, MessageCircle } from 'lucide-react';
-import { buildWhatsAppMessage, KAAMWALE_PHONE } from '../../services/whatsappHelper';
+import { buildWhatsAppMessage, KAAMWALE_PHONE, openWhatsApp as launchWhatsApp } from '../../services/whatsappHelper';
 
 export const Footer = () => {
   const PHONE_NUMBER = KAAMWALE_PHONE;
   const DISPLAY_PHONE = '+91 97626 58206';
 
   const openWhatsApp = () => {
-    const msg = buildWhatsAppMessage();
-    const cleanPhone = PHONE_NUMBER.replace(/\D/g, '');
-    window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank', 'noopener,noreferrer');
+    launchWhatsApp();
   };
 
   return (

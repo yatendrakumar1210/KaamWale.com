@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCity } from '../context/CityContext';
-import { buildWhatsAppMessage, KAAMWALE_PHONE } from '../services/whatsappHelper';
+import { buildWhatsAppMessage, KAAMWALE_PHONE, openWhatsApp } from '../services/whatsappHelper';
 import {
   HardHat,
   Building2,
@@ -31,6 +31,7 @@ export const MajdoorServicesPage = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTatkalModalOpen, setIsTatkalModalOpen] = useState(false);
+  const [modalBookingType, setModalBookingType] = useState('NORMAL');
 
   const PHONE_NUMBER = KAAMWALE_PHONE;
   const DISPLAY_PHONE = '+91 97626 58206';
@@ -59,9 +60,7 @@ export const MajdoorServicesPage = () => {
   };
 
   const openWhatsAppDirect = (serviceName = '') => {
-    const msg = buildWhatsAppMessage(serviceName);
-    const cleanPhone = PHONE_NUMBER.replace(/\D/g, '');
-    window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank', 'noopener,noreferrer');
+    openWhatsApp(serviceName);
   };
 
   const handleCallDirect = () => {
@@ -158,6 +157,8 @@ export const MajdoorServicesPage = () => {
                   <img 
                     src={service.image} 
                     alt={service.name} 
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
@@ -209,6 +210,7 @@ export const MajdoorServicesPage = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         initialService={selectedService}
+        initialBookingType={modalBookingType}
       />
 
       <TatkalBookingModal

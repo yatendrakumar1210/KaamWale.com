@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Phone, MessageCircle, MapPin, HardHat, ShieldCheck, Clock, Truck, Package, AlertCircle, Compass, Zap, Calendar } from 'lucide-react';
 import { LocationPicker } from './LocationPicker';
-import { buildWhatsAppMessage, KAAMWALE_PHONE } from '../../services/whatsappHelper';
+import { buildWhatsAppMessage, KAAMWALE_PHONE, openWhatsApp } from '../../services/whatsappHelper';
 import API from '../../services/api';
 
 export const BookingModal = ({ isOpen, onClose, initialService, initialBookingType = 'NORMAL' }) => {
@@ -198,7 +198,7 @@ export const BookingModal = ({ isOpen, onClose, initialService, initialBookingTy
     }
 
     const dateStr = selectedDate === 'Aaj' ? 'Aaj' : selectedDate === 'Kal' ? 'Kal' : (customDate || 'Kal');
-    const encodedText = buildWhatsAppMessage({
+    openWhatsApp({
       bookingType,
       serviceName,
       serviceType,
@@ -216,11 +216,6 @@ export const BookingModal = ({ isOpen, onClose, initialService, initialBookingTy
       startTime,
       workNotes
     });
-
-    const cleanPhone = PHONE_NUMBER.replace(/\D/g, '');
-    const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodedText}`;
-
-    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
 
     onClose();
   };

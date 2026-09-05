@@ -11,5 +11,22 @@ export default defineConfig({
         changeOrigin: true
       }
     }
+  },
+  build: {
+    target: 'es2020',
+    cssCodeSplit: true,
+    sourcemap: false,
+    minify: 'esbuild',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'ui-icons': ['lucide-react'],
+          'axios-vendor': ['axios']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 800
   }
 });
+

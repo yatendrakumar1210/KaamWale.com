@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCity } from '../../context/CityContext';
-import { buildWhatsAppMessage, KAAMWALE_PHONE } from '../../services/whatsappHelper';
+import { buildWhatsAppMessage, KAAMWALE_PHONE, openWhatsApp } from '../../services/whatsappHelper';
 import { HardHat, MapPin, ChevronDown, Menu, X, Phone, MessageCircle, Zap } from 'lucide-react';
 import { BookingModal } from '../common/BookingModal';
 import { TatkalBookingModal } from '../common/TatkalBookingModal';
@@ -11,6 +11,7 @@ export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [isTatkalModalOpen, setIsTatkalModalOpen] = useState(false);
+  const [modalBookingType, setModalBookingType] = useState('NORMAL');
 
   const location = useLocation();
 
@@ -20,9 +21,7 @@ export const Navbar = () => {
   const isActive = (path) => location.pathname === path;
 
   const openWhatsAppDirect = () => {
-    const msg = buildWhatsAppMessage();
-    const cleanPhone = PHONE_NUMBER.replace(/\D/g, '');
-    window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank', 'noopener,noreferrer');
+    openWhatsApp();
   };
 
   return (
@@ -253,6 +252,7 @@ export const Navbar = () => {
       <BookingModal
         isOpen={isBookingModalOpen}
         onClose={() => setIsBookingModalOpen(false)}
+        initialBookingType={modalBookingType}
       />
 
       <TatkalBookingModal

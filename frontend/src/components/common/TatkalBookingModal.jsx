@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Phone, MessageCircle, MapPin, HardHat, ShieldCheck, Clock, Zap, AlertCircle, Calendar } from 'lucide-react';
 import { LocationPicker } from './LocationPicker';
-import { buildWhatsAppMessage, KAAMWALE_PHONE } from '../../services/whatsappHelper';
+import { buildWhatsAppMessage, KAAMWALE_PHONE, openWhatsApp } from '../../services/whatsappHelper';
 import API from '../../services/api';
 
 export const TatkalBookingModal = ({ isOpen, onClose, initialService }) => {
@@ -13,7 +13,11 @@ export const TatkalBookingModal = ({ isOpen, onClose, initialService }) => {
   const [workNotes, setWorkNotes] = useState('');
 
   // Location state
-  const [workLocation, setWorkLocation] = useState(null);
+  const [workLocation, setWorkLocation] = useState({
+    address: 'Bulandshahr Site',
+    latitude: 28.4089,
+    longitude: 77.8498
+  });
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -111,9 +115,7 @@ export const TatkalBookingModal = ({ isOpen, onClose, initialService }) => {
   const handleWhatsAppBooking = () => {
     if (!validateTatkalBooking()) return;
     const payload = getPayload();
-    const message = buildWhatsAppMessage(payload);
-    const cleanPhone = PHONE_NUMBER.replace(/\D/g, '');
-    window.open(`https://wa.me/${cleanPhone}?text=${message}`, '_blank', 'noopener,noreferrer');
+    openWhatsApp(payload);
     onClose();
   };
 
